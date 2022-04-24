@@ -2,6 +2,7 @@ package src.edd;
 
 import java.util.NoSuchElementException;
 import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * <p>
@@ -431,7 +432,11 @@ public abstract class ArbolBinario<T> implements Collection<T> {
         return (Vertice) vertice;
     }
 
-
+    /**
+     * Metodo que regresa un iterador
+     * @return
+     */
+    public abstract Iterator<T> iterator();
     
 
 

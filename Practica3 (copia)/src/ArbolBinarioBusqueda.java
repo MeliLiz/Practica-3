@@ -91,7 +91,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         //Si el elemento es igual al auxiliar no hacemos nada porque sería un elemento repetido
         if(!actual.elemento.equals(nuevo.elemento)){
             
-            if(actual.elemento.compareTo(nuevo.elemento)<1){//Si el elemento del nodo nuevo es menor que el elemento del vertice actual
+            if(nuevo.elemento.compareTo(actual.elemento)<0){//Si el elemento del nodo nuevo es menor que el elemento del vertice actual
                 if(actual.hayIzquierdo()){//y el nodo actual tiene hijo izquierdo
                     actual=actual.izquierdo;//el hijo izquierdo será el nodo actual
                     verifica(nuevo,actual);//y hacemos la verificación con el nodo actual(que ahora es el hijo izquierdo)
@@ -143,9 +143,13 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      * Metodo para buscar un elemento en el arbol
      * @param raiz el nodo raiz del arbol
      * @param elemento el elemento a buscar
+     * @throws IllegalArgumentException
      * @return boolean
      */
     public boolean search(Vertice raiz, T elemento){
+        if(elemento==null){
+            throw new IllegalArgumentException();
+        }
         //Si la el elemento de la raíz es igual al elemento buscado, hemos encontrado al elemento
         if(raiz.elemento.equals(elemento)){
             return true;
@@ -176,6 +180,56 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      */
     public boolean buscaElemento(T elemento){
         return search(this.raiz,elemento);
+    }
+
+    public void convertBST(ArbolBinario<T> arbol){
+        //arbol BST que regresaremos
+        ArbolBinarioBusqueda<T> regreso=new ArbolBinarioBusqueda<T>();
+        //Iterador del arbol que nos dan
+        Iterator<T> iterador=arbol.iterator();
+        //Añadimos todos los elementos del arbol binario que nos dan
+        while(iterador.hasNext()){
+            regreso.add(iterador.next());
+        }
+    }
+
+    private Vertice rotarDerecha(Vertice x){
+        if(!x.hayIzquierdo()){//si el vertice a rotsar no tiene hijo izquierdo
+            throw new IllegalArgumentException();//no podemos hacer la rotación
+        }
+        Vertice w=x.izquierdo;
+        x.izquierdo=w.derecho;
+        w.derecho=x;
+        return w;//raíz nueva
+    }
+
+    private Vertice rotarIzquierda(Vertice w){
+        if(!w.hayDerecho()){//si el vertice a rotsar no tiene hijo derecho
+            throw new IllegalArgumentException();//no podemos hacer la rotación
+        }
+        Vertice x=w.derecho;
+        w.derecho=x.izquierdo;
+        x.izquierdo=w;
+        
+        return x;//raíz nueva
+    }
+
+    private void add2(T elemento){
+        if(elemento==null){
+            throw new IllegalArgumentException();
+        }else if(isEmpty()){
+            raiz=new Vertice(elemento);
+        }else{
+            addBalanceado(raiz, elemento);
+        }
+    }
+
+    private void addBalanceado(Vertice raiz, T elemento){
+        if(!raiz.elemento.equals(elemento)){
+            if(elemento.compareTo(raiz.elemento)<0){
+
+            }
+        }
     }
 
     /**
