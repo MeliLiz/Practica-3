@@ -227,7 +227,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
     private void addBalanceado(Vertice raiz, T elemento){
         if(!raiz.elemento.equals(elemento)){
             if(elemento.compareTo(raiz.elemento)<0){
-
+                
             }
         }
     }
