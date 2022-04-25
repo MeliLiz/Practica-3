@@ -78,11 +78,6 @@ public class P3 {
         if(nivel==numReinas){//Caso base: encontramos una solución cuando el nivel del arbol es el ultimo, cuando ya pudimos poner a todas las reinas
             //System.out.println("base");
             s++;
-            /*System.out.println(s);
-            for(int i=0;i<numReinas;i++){
-                System.out.print(posFilas[i]+" ");
-            }*/
-            //System.out.println(s);
             System.out.println(s+" ############################");
             for(int i=0;i<numReinas;i++){
                 tablero[i][posFilas[i]]="R ";
@@ -124,109 +119,46 @@ public class P3 {
     }
 
     //###############################################################################################################################################################################################################################################################3
-    /*public static void primosQueSuman(int suma, int primo, int n){
-        //lista de numeros primos hasta suma
-        Lista <Integer> primos=cribaEratostenes(suma);
-        //quitamos los primos menores que primo
-        for(int i=0;i<primos.size();i++){
-            if(primos.elementoEnPos(0)<=primo){
-                primos.eliminaEnPos(0);
-            }
-        }
-        primos.reverse();
-        Pila<Integer> pilaPrimos=new Pila<Integer>();
-        Iterator<Integer> it=primos.iterator();
-        for(int i=0;i<primos.size();i++){
-            pilaPrimos.push(it.next());
-        }
-        //pila para poner las soluciones parciales
-        Pila<Integer> pila=new Pila<Integer>();
-        Pila<Integer> auxiliar=new Pila<Integer>();
-        Pila<Integer> aux2=new Pila <Integer>();
-        int s=0;//suma actual
-        int contador=0;
-        suma(pilaPrimos,n,suma, pila,0, s, auxiliar, aux2, contador);
-    }
 
-    private static void suma(Pila<Integer> pilaPrimos, int n, int suma, Pila<Integer> pila, int nivel, int sumaActual, Pila<Integer> auxiliar, Pila<Integer> aux2, int contador){
-        if(nivel==n){//Caso base: ya estamos hasta el ultimo nivel del arbol
-            
-            if(sumaActual==suma){//Si la suma es el numero, imprimir solución
-                System.out.println(pila);
-            }
-        }else{
-            ciclo:
-            for(int i=nivel;i<pilaPrimos.size();i++){
-                if(sumaActual+pilaPrimos.peek()<=suma){//si la sumaActual todavía no se pasa de suma, hacemos la llamada recursiva
-                    //sumamos el primer elemento de la cola de primos
-                    sumaActual+=pilaPrimos.peek();
-                    //ponemos en la pila el primer elemento de la cola de primos finRango lo eliminamos de primos
-                    pila.push(pilaPrimos.pop());
-                    if(nivel+1==n){
-                        contador++;
-                    }
-                    //Hacemos la llamada recursiva bajando un nivel en el arbol
-                    
-                    suma(pilaPrimos,n,suma,pila,nivel+1,sumaActual);
-                    sumaActual-=pila.peek();//restamos el elemento que habíamos puesto antes de la llamada recursiva
-                    auxiliar.push(pila.pop());
-                }else{
-                    for(int j=0;j<contador;j++){
-                        pilaPrimos.push(auxiliar.pop());
-                    }
-                    if(!pila.isEmpty()){
-                        auxiliar.push(pila.pop());
-                    }
-                    contador=0;
-                    break ciclo;
-                }
-            } 
-        }
-    }*/
-    
-    /*public static void suma(Lista<Lista<Integer>> soluciones, Lista<Integer> formando, int[] listaPrimos, int resta, int suma, int sumaActual){
-        if(resta < 0){
-            System.out.println("resta<0");
-            return;
-        }else if(resta == 0){
-            soluciones.add(formando);
-            System.out.println("agrega");
-        }
-        else {
-            for(int i=suma;i<listaPrimos.length;i++){
-                //System.out.println("recursion");
-                formando.add(listaPrimos[i]);
-                //System.out.println("formando");
-                suma(soluciones, formando, listaPrimos, resta - listaPrimos[i], i,sumaActual);
-                    formando.pop();
-                System.out.println("DEspues de recursion lista formando: "+formando);
-                
-            }
-        }
-    }*/
-
-    public static void suma(Lista<Integer> formando, Integer[] listaPrimos, int sumaActual, int sumacte, int k, int nivel){
-        if (formando.size() == k) {
-            if (sumaActual == sumacte) {
+    /**
+     * Metodo privado auxiliar de PrimosQueSuman
+     * @param formando lista con las soluciones parciales
+     * @param listaPrimos arreglo de los numeros primos
+     * @param sumaActual la suma actual inicial
+     * @param sumacte la suma que queremos formar
+     * @param k numero de sumandos requeridos
+     * @param nivel el nivel en el que estamos del arbol
+     */
+    private static void suma(Lista<Integer> formando, Integer[] listaPrimos, int sumaActual, int sumacte, int k, int nivel){
+        if (formando.size() == k) {//si estamos en el ultimo nivel del arbol
+            if (sumaActual == sumacte) {//comparamos la suma que llevamos con la suma requerida
                 //System.out.println("Caso base");
                 System.out.println(formando);
             }
             return;
         }else{
-            for (int i = nivel; i < listaPrimos.length; i++) {
-                if (sumaActual + listaPrimos[i] > sumacte){
+            for (int i = nivel; i < listaPrimos.length; i++) {//reecorremos los nodos del mismo nivel(en cada nivel)
+                if (sumaActual + listaPrimos[i] > sumacte){//si la suma actual es mayor, ya no tiene caso recorrer todo lo que falta
                     break; 
                 }
-                sumaActual += listaPrimos[i];
+                sumaActual += listaPrimos[i];//sumamos el elemento de la posicion i
                 //System.out.println("Suma actual: "+sumaActual);
-                formando.add(listaPrimos[i]);
-                suma(formando, listaPrimos,sumaActual, sumacte,  k, i+1);
-                sumaActual -= listaPrimos[i];
-                formando.pop();
+                formando.add(listaPrimos[i]);//añadimos el elemento a la lista que estamos formando de soluciones parciales
+                suma(formando, listaPrimos,sumaActual, sumacte,  k, i+1);//recursion
+                sumaActual -= listaPrimos[i];//restamos lo que habiamos sumado
+                formando.pop();//quitamos de la lista lo que le habíamos agregado
             }
         }
     }
+
+    /**
+     * Metodo para obtener n numeros primos mayores que primo que suman suma
+     * @param suma
+     * @param primo
+     * @param n
+     */
     public static void primosQueSuman(int suma, int primo, int n) {
+        //Sacamos los numeros desde el 2 hasta suma
         Lista <Integer> primos=cribaEratostenes(suma);
         //quitamos los primos menores que primo
         for(int i=0;i<primos.size();i++){
@@ -235,52 +167,17 @@ public class P3 {
             }
         }
         //System.out.println(primos);
+        //Pasamos la lista de primos a un arreglo
         Integer[] arrPrimos=new Integer[primos.size()];
         Iterator<Integer> it=primos.iterator(); 
         for(int i=0;i<arrPrimos.length;i++){
             arrPrimos[i]=it.next();
         }
-        /*for(int i=0;i<arrPrimos.length;i++){
-            System.out.println(arrPrimos[i]);
-        }*/
-        //Lista<Lista<Integer>> soluciones=new Lista<Lista<Integer>>();
+        //Lista en la que iremos formando las soluciones parciales
         Lista<Integer> formando=new Lista<Integer>();
         int sumaActual=0;
         suma(formando, arrPrimos, sumaActual, suma,  n,0);
-        //Iterator<Lista<Integer>> iterador=soluciones.iterator();
-        /*for(int i=0;i<soluciones.size();i++){
-            Lista<Integer> actual=iterador.next();
-            
-                System.out.println(actual);
-            
-        }*/
     }
-
-    /*private static void suma(Pila<Integer> primos, int n, int suma, Pila<Integer> pila,int nivel, int sumaActual, int contador){
-        
-        if(nivel==n){//Caso base: ya estamos hasta el ultimo nivel del arbol
-            
-            if(sumaActual==suma){//Si la suma es el numero, imprimir solución
-                System.out.println(pila);
-            }
-        }else{//si todavía no estamos en el ultimo nivel del arbol
-            for(int i=nivel;i<primos.size();i++){
-                if(sumaActual+primos.peek()<=suma){//si la sumaActual todavía no se pasa de suma, hacemos la llamada recursiva
-                    //sumamos el primer elemento de la cola de primos
-                    sumaActual+=primos.peek();
-                    //ponemos en la pila el primer elemento de la cola de primos finRango lo eliminamos de primos
-                    pila.push(primos.pop());
-                    //Hacemos la llamada recursiva bajando un nivel en el arbol
-                    
-                    suma(primos,n,suma,pila,nivel+1,sumaActual, contador);
-                        sumaActual-=pila.peek();//restamos el elemento que habíamos puesto antes de la llamada recursiva
-                        primos.push(pila.pop());//regresamos a la cola de primos el elemento que habíamos quitado 
-                       
-                    
-                }
-            } 
-        }
-    }*/
     
     /**
      * Metodo auxiliar para obtemner los numeros primos desde 2 hasta un número dado
@@ -345,15 +242,3 @@ public class P3 {
         //sqrtBusqBin(45);
     }
 }
-
-/*System.out.print("Suma: "+sumaActual+" ");
-            System.out.print("Nivel: "+nivel+" ");
-            System.out.println();
-            System.out.println("Caso base");*/
-
-/*System.out.print("Suma: "+sumaActual+" ");
-                    System.out.print("Nivel: "+nivel+" ");
-                    System.out.println();
-                    System.out.println("Pila: "+pila);
-                    System.out.println("Cola: "+primos);
-                    System.out.println();*/
