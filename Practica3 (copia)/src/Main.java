@@ -1,4 +1,7 @@
 package src.edd;
+
+import java.util.Iterator;
+
 /**
  * Clase de prueba de la baraja
  */
@@ -45,7 +48,17 @@ public class Main {
         ArbolBinarioBusqueda<Integer> arbol=new ArbolBinarioBusqueda<Integer>();
         arbol=arbol.buildUnsorted(lista);
         System.out.println(arbol);
+        ArbolBinarioBusqueda<Integer> arbol1=new ArbolBinarioBusqueda<Integer>();
+        arbol1.convertBST(arbol);
+        System.out.println(arbol1);
         //System.out.println(arbol.auxiliar(5));
         //System.out.println(arbol.auxiliar(31));
+        //Iterator<Integer> it=arbol.iterator();
+        /*for(int i=0;i<arbol.size();i++){
+            System.out.println(it.next());
+        }
+        while(it.hasNext()){
+            System.out.println(it.next());
+        }*/
     }
 }

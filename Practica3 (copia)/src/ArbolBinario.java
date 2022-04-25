@@ -127,6 +127,10 @@ public abstract class ArbolBinario<T> implements Collection<T> {
             if (hayDerecho()){
                 alturaDerecho = derecho.altura();
             }
+            /*if(this==null){
+                alturaDerecho=-1;
+                return alturaDerecho;
+            }*/
             return 1 + Math.max(alturaIzquierdo, alturaDerecho);
         }
 

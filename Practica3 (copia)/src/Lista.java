@@ -195,9 +195,15 @@ public class Lista<T> implements Collection<T> {
      */
     public T pop() {
         T valor = ultimo.elemento;
+        if(this.size()==1){
+            this.empty();
+        }else{
+            
         ultimo = ultimo.anterior;
         ultimo.siguiente = null;
         longi--;
+        }
+        
         return valor;
     }
 

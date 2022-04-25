@@ -76,6 +76,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         Vertice nuevo = nuevoVertice(elemento);
         if (isEmpty()) {
             raiz = nuevo;
+            elementos++;
         }else{
             Vertice aux=raiz;
             verifica(nuevo, aux);
@@ -182,55 +183,314 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         return search(this.raiz,elemento);
     }
 
+
     public void convertBST(ArbolBinario<T> arbol){
+        if(!isEmpty()){
+            throw new IllegalArgumentException();
+        }
         //arbol BST que regresaremos
-        ArbolBinarioBusqueda<T> regreso=new ArbolBinarioBusqueda<T>();
+        //ArbolBinarioBusqueda<T> regreso=new ArbolBinarioBusqueda<T>();
         //Iterador del arbol que nos dan
         Iterator<T> iterador=arbol.iterator();
         //Añadimos todos los elementos del arbol binario que nos dan
         while(iterador.hasNext()){
-            regreso.add(iterador.next());
+            add2(iterador.next());
         }
     }
 
-    private Vertice rotarDerecha(Vertice x){
-        if(!x.hayIzquierdo()){//si el vertice a rotsar no tiene hijo izquierdo
-            throw new IllegalArgumentException();//no podemos hacer la rotación
-        }
-        Vertice w=x.izquierdo;
-        x.izquierdo=w.derecho;
-        w.derecho=x;
-        return w;//raíz nueva
-    }
-
-    private Vertice rotarIzquierda(Vertice w){
-        if(!w.hayDerecho()){//si el vertice a rotsar no tiene hijo derecho
-            throw new IllegalArgumentException();//no podemos hacer la rotación
-        }
-        Vertice x=w.derecho;
-        w.derecho=x.izquierdo;
-        x.izquierdo=w;
-        
-        return x;//raíz nueva
-    }
+    
 
     private void add2(T elemento){
+        //ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();
         if(elemento==null){
             throw new IllegalArgumentException();
         }else if(isEmpty()){
             raiz=new Vertice(elemento);
+            elementos++;
         }else{
-            addBalanceado(raiz, elemento);
+            //System.out.println("add 2");
+            raiz=addBalanceado(raiz, elemento);
         }
     }
 
-    private void addBalanceado(Vertice raiz, T elemento){
-        if(!raiz.elemento.equals(elemento)){
-            if(elemento.compareTo(raiz.elemento)<0){
+    private Vertice addBalanceado(Vertice padre, T elemento){
+        if(!padre.elemento.equals(elemento)){
+            if(elemento.compareTo(padre.elemento)<0){
+                if(padre.hayIzquierdo()){
+                    padre.izquierdo=addBalanceado(padre.izquierdo, elemento);
+                }else{
+                    Vertice nuevo=new Vertice(elemento);
+                    padre.izquierdo=nuevo;
+                    nuevo.padre=padre;
+                    elementos++;
+                    
+                }
+                int alturaDerecha=0;
+                int alturaIzquierda=0;
+                if(this.raiz.hayIzquierdo()){
+                    alturaIzquierda=this.raiz.izquierdo.altura();
+                }
+                if(this.raiz.hayDerecho()){
+                    alturaDerecha=this.raiz.derecho.altura();
+                }
+                System.out.println("Altura elemento: "+elemento+ " altura izq : "+alturaIzquierda+ " altura der: "+ alturaDerecha);
+                if(Math.abs(alturaIzquierda-alturaDerecha)>1){
+                    if(elemento.compareTo(padre.izquierdo.elemento)<0){
+                        padre=rotarDerecha(padre);
+                    }else{
+                        padre=rotarDerecha2(padre);
+                    }
+                }
+                
+                
+                
+            }else{
+                if(padre.hayDerecho()){
+                    padre.derecho=addBalanceado(padre.derecho, elemento);
+                }else{
+                    Vertice nuevo=new Vertice(elemento);
+                    padre.derecho=nuevo;
+                    nuevo.padre=padre;
+                    elementos++;
+                    int alturaDerecha=0;
+                    int alturaIzquierda=0;
+                    if(raiz.hayIzquierdo()){
+                        alturaIzquierda=raiz.izquierdo.altura();
+                    }
+                    if(raiz.hayDerecho()){
+                        alturaDerecha=raiz.derecho.altura();
+                    }
+                    System.out.println("Altura elemento: "+elemento+ " altura izq : "+alturaIzquierda+ " altura der: "+ alturaDerecha);
+                    if(Math.abs(alturaDerecha-alturaIzquierda)>1){
+                        System.out.println("Elemento: "+ elemento+" Padre: "+padre);
+                            if(elemento.compareTo(padre.derecho.elemento)<0){
+                                padre=rotarIzquierda2(padre);
+                            }else{
+                                padre=rotarIzquierda(padre);
+                            }     
+                    }
+                    
+                }
+                
                 
             }
         }
+        return padre;
     }
+
+    private Vertice rotarDerecha(Vertice raiz){
+        if(!raiz.hayIzquierdo()){//si el vertice a rotsar no tiene hijo izquierdo
+            throw new IllegalArgumentException("No se puede rotar a la derecha");//no podemos hacer la rotación
+        }
+        Vertice izquierdo=raiz.izquierdo;
+        raiz.izquierdo=izquierdo.derecho;
+        izquierdo.derecho=raiz;
+        return izquierdo;//raíz nueva
+    }
+
+    private Vertice rotarIzquierda(Vertice raiz){
+        if(!raiz.hayDerecho()){//si el vertice a rotsar no tiene hijo derecho
+            throw new IllegalArgumentException("No se puede rotar a la izquierda");//no podemos hacer la rotación
+        }
+        Vertice derecho=raiz.derecho;
+        raiz.derecho=derecho.izquierdo;
+        derecho.izquierdo=raiz;
+        
+        return derecho;//raíz nueva
+    }
+
+    private Vertice rotarIzquierda2(Vertice raiz){
+        raiz.izquierdo=rotarDerecha(raiz.izquierdo);
+        return rotarIzquierda(raiz);
+    }
+
+    private Vertice rotarDerecha2(Vertice raiz){
+        raiz.derecho=rotarIzquierda(raiz.derecho);
+        return rotarDerecha(raiz);
+    }
+
+
+    /*public void convertBST(ArbolBinario<T> arbol){
+        if(!isEmpty()){//El arbol actual deberá ser vacio porque ahí agregaremos los elementos del arbol parametro
+            throw new IllegalArgumentException("Este metodo se aplica solo a arboles vacios");
+        }else{
+            //iterador del arbol parametro
+            Iterator<T> iterador=arbol.iterator();
+            //añadimos cada elemento del arbol parametro
+            while(iterador.hasNext()){
+                addConvert(iterador.next());
+            }
+        }
+    }
+
+    private void addConvert(T elemento){
+        if(elemento==null){
+            throw new IllegalArgumentException();
+        }else if(isEmpty()){
+            raiz=new Vertice(elemento);
+            elementos++;
+        }else{
+            addBalanceado(raiz,raiz,elemento);
+        }
+    }
+
+    private void addBalanceado(Vertice raizcte,Vertice raiz, T elemento){
+        if(elemento==null){
+            throw new IllegalArgumentException();
+        }else{
+            if(!elemento.equals(raiz.elemento)){
+                if(elemento.compareTo(raiz.elemento)<0){
+                    if(raiz.hayIzquierdo()){
+                        addBalanceado(raizcte,raiz.izquierdo, elemento);;
+                    }else{
+                        Vertice nuevo=new Vertice(elemento);
+                        raiz.izquierdo=nuevo;
+                        nuevo.padre=raiz;
+                        elementos++;
+                        int alturaDerecha=0;
+                        int alturaIzquierda=0;
+                        if(raiz.hayPadre()){
+                            if(!raiz.padre.hayDerecho()){
+                                Vertice v=rotarDerecha(raiz);
+                                if(!v.hayPadre()){
+                                    this.raiz=v;
+                                }
+                            }else if(!raiz.padre.hayIzquierdo()){
+                                Vertice v=rotarIzquierda(raiz);
+                                if(!v.hayPadre()){
+                                    this.raiz=v;
+                                }
+                            }
+                        }
+                        if(raizcte.hayDerecho()){
+                            alturaDerecha=raizcte.derecho.altura();
+                        }
+                        if(raizcte.hayIzquierdo()){
+                            alturaIzquierda=raizcte.izquierdo.altura();
+                        }
+                        if(alturaIzquierda-alturaDerecha>1){
+                            raiz=rotarIzquierda(raiz);
+                            this.raiz=rotarDerecha(raizcte);
+                        }else if(alturaDerecha-alturaIzquierda>1){
+                            this.raiz=rotarIzquierda(raizcte);
+                        }
+                    }
+                }else{
+                    if(raiz.hayDerecho()){
+                        addBalanceado(raizcte,raiz.derecho, elemento);
+                    }else{
+                        Vertice nuevo=new Vertice(elemento);
+                        raiz.derecho=nuevo;
+                        nuevo.padre=raiz;
+                        elementos++;
+                        if(raiz.hayPadre()){
+                            if(!raiz.padre.hayIzquierdo()){
+                                Vertice v=rotarIzquierda(raiz);
+                                if(!v.hayPadre()){
+                                    this.raiz=v;
+                                }
+                            }else if(!raiz.padre.hayDerecho()){
+                                Vertice v=rotarDerecha(raiz);
+                                if(!v.hayPadre()){
+                                    this.raiz=v;
+                                }
+                            }
+                        }
+                        int alturaDerecha=0;
+                        int alturaIzquierda=0;
+                        if(raizcte.hayDerecho()){
+                            alturaDerecha=raizcte.derecho.altura();
+                        }
+                        if(raizcte.hayIzquierdo()){
+                            alturaIzquierda=raizcte.izquierdo.altura();
+                        }
+                        if(alturaDerecha-alturaIzquierda>1){
+                            this.raiz=rotarIzquierda(raizcte);
+                        }else if(alturaIzquierda-alturaDerecha>1){
+                            this.raiz=rotarDerecha(raizcte);
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }
+
+    private Vertice rotarIzquierda(Vertice raiz){
+        if(!raiz.hayDerecho()){//si el vertice a rotsar no tiene hijo derecho
+            throw new IllegalArgumentException();//no podemos hacer la rotación
+        }
+        //Vertice derecho de la raiz
+        Vertice derecho=raiz.derecho;
+        raiz.derecho=derecho.izquierdo;//el derecho de la raiz será el izquierdo que tenia el derecho de la raiz
+        derecho.izquierdo=raiz;//el izquierdo del derecho de la raiz sera la raiz
+        
+        return derecho;//raíz nueva
+    }
+
+    private Vertice rotarDerecha(Vertice raiz){
+        if(!raiz.hayIzquierdo()){//si el vertice a rotsar no tiene hijo izquierdo
+            throw new IllegalArgumentException();//no podemos hacer la rotación
+        }
+        //vertice izquierdo de la raiz
+        Vertice izquierdo=raiz.izquierdo;
+        raiz.izquierdo=izquierdo.derecho;//el izquierdo de la raía ahora será el serecho del izquierdo de la raiz
+        izquierdo.derecho=raiz;//el derecho del izquierdo de la raiz sera la raiz
+        return izquierdo;//raíz nueva
+    }*/
+
+    /*public void convertBST(ArbolBinario<T> arbol){
+        if(!isEmpty()){//El arbol actual deberá ser vacio porque ahí agregaremos los elementos del arbol parametro
+            throw new IllegalArgumentException("Este metodo se aplica solo a arboles vacios");
+        }else{
+            //iterador del arbol parametro
+            Iterator<T> iterador=arbol.iterator();
+            //añadimos cada elemento del arbol parametro
+            while(iterador.hasNext()){
+                T elem=iterador.next();
+                raiz=insertar(elem, raiz);
+            }
+        }
+    }
+
+    private Vertice insertar(T valorNuevo, Vertice raiz){
+        if(isEmpty()){
+            raiz=new Vertice(valorNuevo);
+            elementos++;
+        }else if(valorNuevo.compareTo(raiz.elemento)<0){
+            raiz.izquierdo=insertar(valorNuevo, raiz.izquierdo);
+        }else if(valorNuevo.compareTo(raiz.elemento)>0){
+            raiz.derecho=insertar(valorNuevo, raiz.derecho);
+        }else{
+
+        }
+        if(raiz.izquierdo.altura()-raiz.derecho.altura()==2){
+            if(valorNuevo.compareTo(raiz.izquierdo.elemento)<0){
+                raiz=rotarIzquierda(raiz);
+            }else{
+                raiz=rotarIzquierda2(raiz);
+            }
+        }
+        if(raiz.derecho.altura()-raiz.izquierdo.altura()==2){
+            if(valorNuevo.compareTo(raiz.derecho.elemento)>0){
+                raiz=rotarDerecha(raiz);
+            }else{
+                raiz=rotarDerecha2(raiz);
+            }
+        }
+        return raiz;
+    }
+    
+    private Vertice rotarIzquierda2(Vertice raiz){
+        raiz.izquierdo=rotarDerecha(raiz.izquierdo);
+        return rotarIzquierda(raiz);
+    }
+
+    private Vertice rotarDerecha2(Vertice raiz){
+        raiz.derecho=rotarIzquierda(raiz.derecho);
+        return rotarDerecha(raiz);
+    }*/
+
 
     /**
      * Metodo para obtener un iterador del arbol BST
