@@ -74,8 +74,15 @@ public class Main {
         listaP.add(3);
         listaP.add(4);
         listaP.add(5);
+        listaP.add(6);
+        listaP.add(7);
+        listaP.add(8);
+        listaP.add(9);
+        listaP.add(10);
         ArbolBinarioBusqueda<Integer> arbolito=new ArbolBinarioBusqueda<Integer>();
         arbolito.buildSorted(listaP);
         System.out.println(arbolito);
+        //System.out.println(Math.ceil(15/2));
+        //System.out.println(5/2);
     }
 }
