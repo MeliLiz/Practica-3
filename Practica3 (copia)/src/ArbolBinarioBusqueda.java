@@ -153,7 +153,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         }
         //Si la el elemento de la raíz es igual al elemento buscado, hemos encontrado al elemento
         if(raiz.elemento.equals(elemento)){
-            System.out.println(raiz.altura());
+            //System.out.println(raiz.altura());
             return true;
         }else{//Si el elemento de la raíz no es igual al elemento buscado
             if(elemento.compareTo(raiz.elemento)<0){   //y el buscado es menor que elelemento de la raíz
@@ -184,7 +184,10 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         return search(this.raiz,elemento);
     }
 
-
+    /**
+     * Metodo que se aplica a arboles vacios. Hace que el arbol actual sea el arbol ordenado balanceado del arbol parametro
+     * @param arbol 
+     */
     public void convertBST(ArbolBinario<T> arbol){
         if(!isEmpty()){
             throw new IllegalArgumentException("Este metodo requiere que el arbol actual sea vacio");
@@ -198,82 +201,89 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
     }
 
     
-
+    /**
+     * Metodo auxiliar de convertBST para hacer la verificacion antes de añadir el elemento
+     * @param elemento
+     */
     private void add2(T elemento){
         //ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();
         if(elemento==null){
             throw new IllegalArgumentException("No se puede agregar null al arbol");
-        }else if(isEmpty()){
+        }else if(isEmpty()){//si el arbol esta vacio, el nuevo vertice sera la raiz
             raiz=new Vertice(elemento);
             elementos++;
-        }else{
+        }else{//si el arbol no es la raiz
             //System.out.println("add 2");
-            raiz=addBalanceado(raiz, elemento);
+            raiz=addBalanceado(raiz, elemento);//la nueva raiz sera el vertice regresado por addBalanceado
         }
     }
 
+    /**
+     * Metodo auxiliar para añadir un elemento en el arbol de manera ordenada y balanceada
+     * @param padre 
+     * @param elemento
+     * @return
+     */
     private Vertice addBalanceado(Vertice padre, T elemento){
-        if(!padre.elemento.equals(elemento)){
-            if(elemento.compareTo(padre.elemento)<0){
-                if(padre.hayIzquierdo()){
+        if(!padre.elemento.equals(elemento)){//Verificamos que el elemento a añadir no este repetido
+            if(elemento.compareTo(padre.elemento)<0){//Si el elemento a añadir es menor al elemento del vertice que estamos comparando, verificamos a la izquierda del arbol
+                if(padre.hayIzquierdo()){//si hay nodo izquierdo, hacemos recursion
                     padre.izquierdo=addBalanceado(padre.izquierdo, elemento);
-                }else{
+                }else{//si no hay izquierdo añadimos el vertice
                     Vertice nuevo=new Vertice(elemento);
                     padre.izquierdo=nuevo;
                     nuevo.padre=padre;
                     elementos++;
                     
                 }
+                //verificamos si debemos hacer rotaciones para conservar el balance del arbol
                 int alturaDerecha=0;
                 int alturaIzquierda=0;
-                if(padre.hayPadre()){
-                    if(padre.hayIzquierdo()){
-                        alturaIzquierda=padre.izquierdo.altura();
-                    }
-                    if(padre.hayDerecho()){
-                        alturaDerecha=padre.derecho.altura();
-                    }
+                //tomamos las alturas de los subarboles izquierdo y derecho y las comparamos para saber si su resta se es mayor a uno(lo cual no debe suceder para que el arbol este balanceado)
+                if(padre.hayIzquierdo()){
+                    alturaIzquierda=padre.izquierdo.altura();
+                }
+                if(padre.hayDerecho()){
+                    alturaDerecha=padre.derecho.altura();
                 }
                 
-                System.out.println("Altura elemento: "+elemento+ " altura izq : "+alturaIzquierda+ " altura der: "+ alturaDerecha);
+                //System.out.println("Altura elemento: "+elemento+ " altura izq : "+alturaIzquierda+ " altura der: "+ alturaDerecha);
                 if(alturaIzquierda-alturaDerecha>1){
-                    if(elemento.compareTo(padre.izquierdo.elemento)<0){
-                        padre=rotarDerecha(padre);
-                    }else{
-                        padre=rotarDerecha2(padre);
+                    if(elemento.compareTo(padre.izquierdo.elemento)<0){//si el elemento es menor que el izquierdo del padre
+                        padre=rotarDerecha(padre);//rotamos una vez a la derecha
+                    }else{//si no
+                        padre=rotarDerecha2(padre);//rotamos primero a la izquierda y luego a la derecha
                     }
                 }
-            }else{
-                if(padre.hayDerecho()){
-                    padre.derecho=addBalanceado(padre.derecho, elemento);
-                }else{
+            }else{//Si el elemento a añadir es mayor al elemento del vertice que estamos comparando, verificamos a la derecha del arbol
+                if(padre.hayDerecho()){//y el vertice que estamos comparando tiene derecho
+                    padre.derecho=addBalanceado(padre.derecho, elemento);//hecemos recursion
+                }else{//si no tiene derecho, añadimos el vertice
                     Vertice nuevo=new Vertice(elemento);
                     padre.derecho=nuevo;
                     nuevo.padre=padre;
                     elementos++;
-                    
-                    
                 }
+                //verificamos si debemos hacer rotaciones para conservar el balance del arbol
                 int alturaDerecha=0;
-                    int alturaIzquierda=0;
-                    if(padre.hayPadre()){
-                        if(padre.hayIzquierdo()){
-                            alturaIzquierda=padre.izquierdo.altura();
-                        }
-                        if(padre.hayDerecho()){
-                            alturaDerecha=padre.derecho.altura();
-                        }
-                    }
+                int alturaIzquierda=0;
+                //tomamos las alturas de los subarboles izquierdo y derecho y las comparamos para saber si su resta se es mayor a uno(lo cual no debe suceder para que el arbol este balanceado)
+                if(padre.hayIzquierdo()){
+                    alturaIzquierda=padre.izquierdo.altura();
+                }
+                if(padre.hayDerecho()){
+                    alturaDerecha=padre.derecho.altura();
+                }
                     
-                    System.out.println("Altura elemento: "+elemento+ " altura izq : "+alturaIzquierda+ " altura der: "+ alturaDerecha);
-                    if(alturaDerecha-alturaIzquierda>1){
-                        System.out.println("Elemento: "+ elemento+" Padre: "+padre);
-                            if(elemento.compareTo(padre.derecho.elemento)<0){
-                                padre=rotarIzquierda2(padre);
-                            }else{
-                                padre=rotarIzquierda(padre);
-                            }     
-                    }
+                //System.out.println("Altura elemento: "+elemento+ " altura izq : "+alturaIzquierda+ " altura der: "+ alturaDerecha);
+                if(alturaDerecha-alturaIzquierda>1){
+                    //System.out.println("Elemento: "+ elemento+" Padre: "+padre);
+                    if(elemento.compareTo(padre.derecho.elemento)<0){//si el elemento es menor que el derecho del padre
+                        padre=rotarIzquierda2(padre);//rotamos una vez a la izquierda
+                    }else{//si no
+                        padre=rotarIzquierda(padre);//rotamos primero a la derecha y luego a la izquierda
+                    }     
+                }
                 
                 
             }
@@ -281,6 +291,11 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         return padre;
     }
 
+    /**
+     * Metodo para rotar un vertice a la derecha
+     * @param raiz el vertice a rotar
+     * @return Vertice
+     */
     private Vertice rotarDerecha(Vertice raiz){
         if(!raiz.hayIzquierdo()){//si el vertice a rotsar no tiene hijo izquierdo
             throw new IllegalArgumentException("No se puede rotar a la derecha");//no podemos hacer la rotación
@@ -291,6 +306,11 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         return izquierdo;//raíz nueva
     }
 
+    /**
+     * Metodo para rotar un vertice a la izquierda
+     * @param raiz El vertice a rotar
+     * @return Vertice
+     */
     private Vertice rotarIzquierda(Vertice raiz){
         if(!raiz.hayDerecho()){//si el vertice a rotsar no tiene hijo derecho
             throw new IllegalArgumentException("No se puede rotar a la izquierda");//no podemos hacer la rotación
@@ -302,11 +322,21 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         return derecho;//raíz nueva
     }
 
+    /**
+     * Metodo para rotar un vertice primero a la derecha y luego a la izquierda
+     * @param raiz El vertice a rotar
+     * @return Vertice
+     */
     private Vertice rotarIzquierda2(Vertice raiz){
         raiz.izquierdo=rotarDerecha(raiz.izquierdo);
         return rotarIzquierda(raiz);
     }
 
+    /**
+     * Metodo para rotar un vertice primero a la izquierda y luego a la derecha
+     * @param raiz El vertice a rotar
+     * @return Vertice
+     */
     private Vertice rotarDerecha2(Vertice raiz){
         raiz.derecho=rotarIzquierda(raiz.derecho);
         return rotarDerecha(raiz);
