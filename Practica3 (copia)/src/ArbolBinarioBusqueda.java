@@ -1,6 +1,7 @@
 package src.edd;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.lang.IllegalCallerException;
 import java.util.Comparator;
 
 import src.edd.ArbolBinario;
@@ -132,9 +133,58 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      * @param lista
      * @return
      */
-    public ArbolBinarioBusqueda<T> buildSorted(Lista<T> lista){
-        //Hacemos lo mismo con el build unsorted. Será de O(n) porque todos los elementos se irán agregando de un solo lado del arbol, haciendo que sea como ir añadiendo los elementos al final de una lista
-        return buildUnsorted(lista);
+    public void buildSorted(Lista<T> lista){
+        if(!isEmpty()){
+            throw new IllegalCallerException("Metodo no aplicable a arboles no vacios");
+        }
+        Iterator<T> iterador=lista.iterator();
+        if(!lista.isEmpty()){
+            raiz=new Vertice(iterador.next());
+        }
+        if(!lista.isEmpty()&&lista.peekCabeza().compareTo(lista.peekUltimo())<0){
+            addListOrdDer(lista, raiz, iterador);
+        }else if(!lista.isEmpty()&&lista.peekCabeza().compareTo(lista.peekUltimo())>0){
+            addListOrdIzq(lista, raiz, iterador);
+        }
+        
+    }
+
+    /**
+     * Metodo auxiliar para construir un arbol binario 
+     * @param lista
+     * @param padre
+     * @param iteradorLista
+     */
+    private void addListOrdDer(Lista<T> lista, Vertice padre, Iterator<T> iteradorLista){
+       if(iteradorLista.hasNext()){
+           Vertice nuevo=new Vertice(iteradorLista.next());
+           if(!nuevo.elemento.equals(padre.elemento)){
+                padre.derecho=nuevo;
+                addListOrdDer(lista, padre.derecho, iteradorLista);
+           }else{
+               iteradorLista.next();
+               if(iteradorLista.hasNext()){
+                addListOrdDer(lista, padre, iteradorLista);
+               }
+           }
+           
+       }
+    }
+
+    private void addListOrdIzq(Lista<T> lista, Vertice padre, Iterator<T> iteradorLista){
+        if(iteradorLista.hasNext()){
+            Vertice nuevo=new Vertice(iteradorLista.next());
+            
+            if(!nuevo.elemento.equals(padre.elemento)){
+                padre.izquierdo=nuevo;
+                addListOrdIzq(lista, padre.izquierdo, iteradorLista);
+            }else{
+                iteradorLista.next();
+                if(iteradorLista.hasNext()){
+                    addListOrdIzq(lista, padre, iteradorLista);
+                }
+            }
+        }
     }
 
     /**
@@ -190,7 +240,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      */
     public void convertBST(ArbolBinario<T> arbol){
         if(!isEmpty()){
-            throw new IllegalArgumentException("Este metodo requiere que el arbol actual sea vacio");
+            throw new IllegalCallerException("Este metodo requiere que el arbol actual sea vacio");
         }
         //Iterador del arbol que nos dan
         Iterator<T> iterador=arbol.iterator();

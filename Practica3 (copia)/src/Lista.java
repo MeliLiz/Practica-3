@@ -82,6 +82,30 @@ public class Lista<T> implements Collection<T> {
     private int longi;
 
     /**
+     * Metodo para obtener el primer elemento de la lista. Si la lista es vacía regresamos null
+     * @return
+     */
+    public T peekCabeza(){
+        if(!isEmpty()){
+            return cabeza.elemento;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * Metodo para obtener el ultimo elemento ed la lista. Si la lista es vacia regresamos null.
+     * @return
+     */
+    public T peekUltimo(){
+        if(!isEmpty()){
+            return ultimo.elemento;
+        }else{
+            return null;
+        }
+    }
+
+    /**
      * Agrega un elemento al final de la lista
      * 
      * @param elemento el elemento a agregar.

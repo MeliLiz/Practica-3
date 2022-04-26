@@ -29,7 +29,7 @@ public class Main {
         System.out.println(pila);
         pila.pop();
         System.out.println(pila);*/
-        Lista<Integer> lista=new Lista<Integer>();
+        /*Lista<Integer> lista=new Lista<Integer>();
         lista.add(20);
         lista.add(15);
         lista.add(10);
@@ -52,7 +52,7 @@ public class Main {
         ArbolBinarioBusqueda<Integer> arbol1=new ArbolBinarioBusqueda<Integer>();
         arbol1.convertBST(arbol);
         System.out.println(arbol1);
-        System.out.println(arbol.buscaElemento(2));
+        System.out.println(arbol.buscaElemento(2));*/
         //System.out.println(arbol.buscReg(2));
         //System.out.println(arbol.auxiliar(5));
         //System.out.println(arbol.auxiliar(31));
@@ -63,5 +63,19 @@ public class Main {
         while(it.hasNext()){
             System.out.println(it.next());
         }*/
+        Lista<Integer> listaP=new Lista<Integer>();
+        /*listaP.add(5);
+        listaP.add(4);
+        listaP.add(3);
+        listaP.add(2);
+        listaP.add(1);*/
+        listaP.add(1);
+        listaP.add(2);
+        listaP.add(3);
+        listaP.add(4);
+        listaP.add(5);
+        ArbolBinarioBusqueda<Integer> arbolito=new ArbolBinarioBusqueda<Integer>();
+        arbolito.buildSorted(listaP);
+        System.out.println(arbolito);
     }
 }
