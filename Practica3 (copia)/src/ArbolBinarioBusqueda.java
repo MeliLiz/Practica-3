@@ -17,15 +17,16 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
          */
         public Iterador(){
             //Metemos todos los nodos izquierdos a la pilaa partir de la raíz
+            Vertice aux=raiz;
             while(raiz!=null){
                 pila.push(raiz);
                 if(raiz.hayIzquierdo()){
                     raiz=raiz.izquierdo;
                 }else{
                     raiz=null;
-                }
-                
+                }    
             }
+            raiz=aux;
         }
         /**
          * Método para saber si el árbol tiene siguiente elemento
@@ -56,12 +57,8 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
                     }
                 }
             }
-            
-            
             return elemento;
-
         }
-
     }
 
     /**
@@ -151,11 +148,15 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         if(elemento==null){
             throw new IllegalArgumentException();
         }
+        if(this.isEmpty()){
+            return false;
+        }
         //Si la el elemento de la raíz es igual al elemento buscado, hemos encontrado al elemento
         if(raiz.elemento.equals(elemento)){
+            System.out.println(raiz.altura());
             return true;
         }else{//Si el elemento de la raíz no es igual al elemento buscado
-            if(raiz.elemento.compareTo(elemento)<0){   //y el buscado es menor que elelemento de la raíz
+            if(elemento.compareTo(raiz.elemento)<0){   //y el buscado es menor que elelemento de la raíz
                 if(raiz.hayIzquierdo()){   //si la raíz tiene hijo izquierdo
                     //entonces buscamos en el subarbol izquierdo
                     return search(raiz.izquierdo, elemento);
@@ -175,7 +176,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
     }
 
     /**
-     * Metodo para buscar un elemento
+     * Metodo para buscar un elemento en el arbol actual
      * @param elemento el elemento a buscar
      * @return
      */
@@ -186,10 +187,8 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
 
     public void convertBST(ArbolBinario<T> arbol){
         if(!isEmpty()){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Este metodo requiere que el arbol actual sea vacio");
         }
-        //arbol BST que regresaremos
-        //ArbolBinarioBusqueda<T> regreso=new ArbolBinarioBusqueda<T>();
         //Iterador del arbol que nos dan
         Iterator<T> iterador=arbol.iterator();
         //Añadimos todos los elementos del arbol binario que nos dan
@@ -203,7 +202,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
     private void add2(T elemento){
         //ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();
         if(elemento==null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No se puede agregar null al arbol");
         }else if(isEmpty()){
             raiz=new Vertice(elemento);
             elementos++;
@@ -227,23 +226,23 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
                 }
                 int alturaDerecha=0;
                 int alturaIzquierda=0;
-                if(this.raiz.hayIzquierdo()){
-                    alturaIzquierda=this.raiz.izquierdo.altura();
+                if(padre.hayPadre()){
+                    if(padre.hayIzquierdo()){
+                        alturaIzquierda=padre.izquierdo.altura();
+                    }
+                    if(padre.hayDerecho()){
+                        alturaDerecha=padre.derecho.altura();
+                    }
                 }
-                if(this.raiz.hayDerecho()){
-                    alturaDerecha=this.raiz.derecho.altura();
-                }
+                
                 System.out.println("Altura elemento: "+elemento+ " altura izq : "+alturaIzquierda+ " altura der: "+ alturaDerecha);
-                if(Math.abs(alturaIzquierda-alturaDerecha)>1){
+                if(alturaIzquierda-alturaDerecha>1){
                     if(elemento.compareTo(padre.izquierdo.elemento)<0){
                         padre=rotarDerecha(padre);
                     }else{
                         padre=rotarDerecha2(padre);
                     }
                 }
-                
-                
-                
             }else{
                 if(padre.hayDerecho()){
                     padre.derecho=addBalanceado(padre.derecho, elemento);
@@ -252,16 +251,22 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
                     padre.derecho=nuevo;
                     nuevo.padre=padre;
                     elementos++;
-                    int alturaDerecha=0;
+                    
+                    
+                }
+                int alturaDerecha=0;
                     int alturaIzquierda=0;
-                    if(raiz.hayIzquierdo()){
-                        alturaIzquierda=raiz.izquierdo.altura();
+                    if(padre.hayPadre()){
+                        if(padre.hayIzquierdo()){
+                            alturaIzquierda=padre.izquierdo.altura();
+                        }
+                        if(padre.hayDerecho()){
+                            alturaDerecha=padre.derecho.altura();
+                        }
                     }
-                    if(raiz.hayDerecho()){
-                        alturaDerecha=raiz.derecho.altura();
-                    }
+                    
                     System.out.println("Altura elemento: "+elemento+ " altura izq : "+alturaIzquierda+ " altura der: "+ alturaDerecha);
-                    if(Math.abs(alturaDerecha-alturaIzquierda)>1){
+                    if(alturaDerecha-alturaIzquierda>1){
                         System.out.println("Elemento: "+ elemento+" Padre: "+padre);
                             if(elemento.compareTo(padre.derecho.elemento)<0){
                                 padre=rotarIzquierda2(padre);
@@ -269,8 +274,6 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
                                 padre=rotarIzquierda(padre);
                             }     
                     }
-                    
-                }
                 
                 
             }
@@ -308,188 +311,6 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         raiz.derecho=rotarIzquierda(raiz.derecho);
         return rotarDerecha(raiz);
     }
-
-
-    /*public void convertBST(ArbolBinario<T> arbol){
-        if(!isEmpty()){//El arbol actual deberá ser vacio porque ahí agregaremos los elementos del arbol parametro
-            throw new IllegalArgumentException("Este metodo se aplica solo a arboles vacios");
-        }else{
-            //iterador del arbol parametro
-            Iterator<T> iterador=arbol.iterator();
-            //añadimos cada elemento del arbol parametro
-            while(iterador.hasNext()){
-                addConvert(iterador.next());
-            }
-        }
-    }
-
-    private void addConvert(T elemento){
-        if(elemento==null){
-            throw new IllegalArgumentException();
-        }else if(isEmpty()){
-            raiz=new Vertice(elemento);
-            elementos++;
-        }else{
-            addBalanceado(raiz,raiz,elemento);
-        }
-    }
-
-    private void addBalanceado(Vertice raizcte,Vertice raiz, T elemento){
-        if(elemento==null){
-            throw new IllegalArgumentException();
-        }else{
-            if(!elemento.equals(raiz.elemento)){
-                if(elemento.compareTo(raiz.elemento)<0){
-                    if(raiz.hayIzquierdo()){
-                        addBalanceado(raizcte,raiz.izquierdo, elemento);;
-                    }else{
-                        Vertice nuevo=new Vertice(elemento);
-                        raiz.izquierdo=nuevo;
-                        nuevo.padre=raiz;
-                        elementos++;
-                        int alturaDerecha=0;
-                        int alturaIzquierda=0;
-                        if(raiz.hayPadre()){
-                            if(!raiz.padre.hayDerecho()){
-                                Vertice v=rotarDerecha(raiz);
-                                if(!v.hayPadre()){
-                                    this.raiz=v;
-                                }
-                            }else if(!raiz.padre.hayIzquierdo()){
-                                Vertice v=rotarIzquierda(raiz);
-                                if(!v.hayPadre()){
-                                    this.raiz=v;
-                                }
-                            }
-                        }
-                        if(raizcte.hayDerecho()){
-                            alturaDerecha=raizcte.derecho.altura();
-                        }
-                        if(raizcte.hayIzquierdo()){
-                            alturaIzquierda=raizcte.izquierdo.altura();
-                        }
-                        if(alturaIzquierda-alturaDerecha>1){
-                            raiz=rotarIzquierda(raiz);
-                            this.raiz=rotarDerecha(raizcte);
-                        }else if(alturaDerecha-alturaIzquierda>1){
-                            this.raiz=rotarIzquierda(raizcte);
-                        }
-                    }
-                }else{
-                    if(raiz.hayDerecho()){
-                        addBalanceado(raizcte,raiz.derecho, elemento);
-                    }else{
-                        Vertice nuevo=new Vertice(elemento);
-                        raiz.derecho=nuevo;
-                        nuevo.padre=raiz;
-                        elementos++;
-                        if(raiz.hayPadre()){
-                            if(!raiz.padre.hayIzquierdo()){
-                                Vertice v=rotarIzquierda(raiz);
-                                if(!v.hayPadre()){
-                                    this.raiz=v;
-                                }
-                            }else if(!raiz.padre.hayDerecho()){
-                                Vertice v=rotarDerecha(raiz);
-                                if(!v.hayPadre()){
-                                    this.raiz=v;
-                                }
-                            }
-                        }
-                        int alturaDerecha=0;
-                        int alturaIzquierda=0;
-                        if(raizcte.hayDerecho()){
-                            alturaDerecha=raizcte.derecho.altura();
-                        }
-                        if(raizcte.hayIzquierdo()){
-                            alturaIzquierda=raizcte.izquierdo.altura();
-                        }
-                        if(alturaDerecha-alturaIzquierda>1){
-                            this.raiz=rotarIzquierda(raizcte);
-                        }else if(alturaIzquierda-alturaDerecha>1){
-                            this.raiz=rotarDerecha(raizcte);
-                        }
-                    }
-                    
-                }
-            }
-        }
-    }
-
-    private Vertice rotarIzquierda(Vertice raiz){
-        if(!raiz.hayDerecho()){//si el vertice a rotsar no tiene hijo derecho
-            throw new IllegalArgumentException();//no podemos hacer la rotación
-        }
-        //Vertice derecho de la raiz
-        Vertice derecho=raiz.derecho;
-        raiz.derecho=derecho.izquierdo;//el derecho de la raiz será el izquierdo que tenia el derecho de la raiz
-        derecho.izquierdo=raiz;//el izquierdo del derecho de la raiz sera la raiz
-        
-        return derecho;//raíz nueva
-    }
-
-    private Vertice rotarDerecha(Vertice raiz){
-        if(!raiz.hayIzquierdo()){//si el vertice a rotsar no tiene hijo izquierdo
-            throw new IllegalArgumentException();//no podemos hacer la rotación
-        }
-        //vertice izquierdo de la raiz
-        Vertice izquierdo=raiz.izquierdo;
-        raiz.izquierdo=izquierdo.derecho;//el izquierdo de la raía ahora será el serecho del izquierdo de la raiz
-        izquierdo.derecho=raiz;//el derecho del izquierdo de la raiz sera la raiz
-        return izquierdo;//raíz nueva
-    }*/
-
-    /*public void convertBST(ArbolBinario<T> arbol){
-        if(!isEmpty()){//El arbol actual deberá ser vacio porque ahí agregaremos los elementos del arbol parametro
-            throw new IllegalArgumentException("Este metodo se aplica solo a arboles vacios");
-        }else{
-            //iterador del arbol parametro
-            Iterator<T> iterador=arbol.iterator();
-            //añadimos cada elemento del arbol parametro
-            while(iterador.hasNext()){
-                T elem=iterador.next();
-                raiz=insertar(elem, raiz);
-            }
-        }
-    }
-
-    private Vertice insertar(T valorNuevo, Vertice raiz){
-        if(isEmpty()){
-            raiz=new Vertice(valorNuevo);
-            elementos++;
-        }else if(valorNuevo.compareTo(raiz.elemento)<0){
-            raiz.izquierdo=insertar(valorNuevo, raiz.izquierdo);
-        }else if(valorNuevo.compareTo(raiz.elemento)>0){
-            raiz.derecho=insertar(valorNuevo, raiz.derecho);
-        }else{
-
-        }
-        if(raiz.izquierdo.altura()-raiz.derecho.altura()==2){
-            if(valorNuevo.compareTo(raiz.izquierdo.elemento)<0){
-                raiz=rotarIzquierda(raiz);
-            }else{
-                raiz=rotarIzquierda2(raiz);
-            }
-        }
-        if(raiz.derecho.altura()-raiz.izquierdo.altura()==2){
-            if(valorNuevo.compareTo(raiz.derecho.elemento)>0){
-                raiz=rotarDerecha(raiz);
-            }else{
-                raiz=rotarDerecha2(raiz);
-            }
-        }
-        return raiz;
-    }
-    
-    private Vertice rotarIzquierda2(Vertice raiz){
-        raiz.izquierdo=rotarDerecha(raiz.izquierdo);
-        return rotarIzquierda(raiz);
-    }
-
-    private Vertice rotarDerecha2(Vertice raiz){
-        raiz.derecho=rotarIzquierda(raiz.derecho);
-        return rotarDerecha(raiz);
-    }*/
 
 
     /**

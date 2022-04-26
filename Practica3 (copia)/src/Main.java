@@ -48,9 +48,12 @@ public class Main {
         ArbolBinarioBusqueda<Integer> arbol=new ArbolBinarioBusqueda<Integer>();
         arbol=arbol.buildUnsorted(lista);
         System.out.println(arbol);
+        System.out.println(arbol.buscaElemento(2));
         ArbolBinarioBusqueda<Integer> arbol1=new ArbolBinarioBusqueda<Integer>();
         arbol1.convertBST(arbol);
         System.out.println(arbol1);
+        System.out.println(arbol.buscaElemento(2));
+        //System.out.println(arbol.buscReg(2));
         //System.out.println(arbol.auxiliar(5));
         //System.out.println(arbol.auxiliar(31));
         //Iterator<Integer> it=arbol.iterator();
