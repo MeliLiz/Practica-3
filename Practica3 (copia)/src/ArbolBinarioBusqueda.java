@@ -1,13 +1,12 @@
 package src.edd;
+import java.lang.IllegalCallerException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.lang.IllegalCallerException;
-import java.util.Comparator;
-import java.util.ArrayList;
-
 import src.edd.ArbolBinario;
 import src.edd.Lista;
 import src.edd.Pila;
+
 
 public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> {
     //#####################################################################################################################################################
@@ -34,6 +33,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         /**
          * Método para saber si el árbol tiene siguiente elemento
          */
+        @Override
         public boolean hasNext(){
             return !pila.isEmpty();
         }
@@ -43,6 +43,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
          * Recorrido inorrder
          * @throws NoSuchElementException
          */
+        @Override
         public T next(){
             if(!hasNext()){
                 throw new NoSuchElementException();
@@ -447,20 +448,50 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      * Metodo para balancear un arbol binario de busqueda
      * @param raiz
      */
-    public void balance(Vertice raiz){
-        if(raiz==null){
+    public void balance(Vertice vertice){
+        if(vertice==null){
             throw new IllegalArgumentException("No se puede balancear un arbol vacio");
+        }
+        //Si el vertice tiene vertice padre, lo guardamos en p y verificamos si el vertice es el hijo derecho o el izquierdo
+        Vertice p=null;
+        boolean der, izq;
+        der=izq=false;
+        if(vertice.hayPadre()){
+            p=vertice.padre;
+            if(p.hayDerecho()){
+                if(p.derecho.elemento.equals(vertice.elemento)){
+                    der=true;
+                }
+            }
+            if(p.hayIzquierdo()){
+                if(p.izquierdo.elemento.equals(vertice.elemento)){
+                    izq=true;
+                }
+            }
+            
         }
         //Hacemos el arbol para poder tener un iterador
         ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();
-        arbol.raiz=raiz;
+        arbol.raiz=vertice;
         //Hacemos el iterador del arbol
         Iterator<T> iterador=arbol.iterator();
         ArrayList<T> arreglo=new ArrayList<T>();//Pasamos todos los elementos del arbol a un arreglo
         while(iterador.hasNext()){
             arreglo.add(iterador.next());
         }
-        this.raiz=balancea(arreglo,0,arreglo.size()-1);//la raiz será el vertice regresado por el metodo recursivo
+        
+        vertice=balancea(arreglo,0,arreglo.size()-1);//la raiz será el vertice regresado por el metodo recursivo
+        vertice.padre=p;
+        if(p!=null){
+            if(der){
+                p.derecho=vertice;
+            }
+            if(izq){
+                p.izquierdo=vertice;
+            }
+        }else{
+            this.raiz=vertice;
+        }
         
     }
 
