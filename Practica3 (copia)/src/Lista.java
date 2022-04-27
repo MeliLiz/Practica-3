@@ -672,6 +672,29 @@ public class Lista<T> implements Collection<T> {
        return resultado;
     } 
 
+    public void quitaRepetidos(){
+        if(!this.isEmpty()){
+            Iterator<T> it=this.iterator();
+            Lista<T> listaAux=new Lista<T>();
+            T actual=it.next();
+            while(it.hasNext()){
+                T aux=it.next();
+                if(actual.equals(aux)){
+                    this.eliminaEnPos(0);
+                    actual=aux;
+                }else{
+                    listaAux.add(actual);
+                    this.eliminaEnPos(0);
+                    actual=aux;
+                }
+            }
+            listaAux.add(actual);
+            this.cabeza=listaAux.cabeza;
+        }
+        
+        
+    }
+
     /**
      * Regresa un iterador para recorrer la lista en una dirección.
      * 

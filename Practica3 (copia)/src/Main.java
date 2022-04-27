@@ -7,21 +7,6 @@ import java.util.Iterator;
  */
 public class Main {
     public static void main(String[] args){
-        /*Baraja baraja = new Baraja();
-        System.out.println(baraja.cartas);
-        //baraja.CartaSiguiente();
-        System.out.println(baraja.CartaSiguiente());
-        System.out.println(baraja.CartaSiguiente());
-        baraja.shuffle();
-        System.out.println(baraja.cartas);
-        System.out.println(baraja.CartaSiguiente());*/
-        /*Lista<Integer> lista=new Lista<Integer>();
-        System.out.println(lista);
-        System.out.println("listo");
-        lista.add(1);
-        System.out.println(lista);
-        lista.eliminaEnPos(0);
-        System.out.println(lista);*/
 
         /*Cola<Integer> pila  =new Cola<Integer>();
         pila.push(1);
@@ -80,9 +65,38 @@ public class Main {
         listaP.add(9);
         listaP.add(10);
         ArbolBinarioBusqueda<Integer> arbolito=new ArbolBinarioBusqueda<Integer>();
-        arbolito.buildSorted(listaP);
+        arbolito.buildUnsorted(listaP);
         System.out.println(arbolito);
+        ArbolBinarioBusqueda<Integer> arbol=new ArbolBinarioBusqueda<Integer>();
+        arbol.buildSorted(listaP);
+        System.out.println(arbol);
+        ArbolBinarioBusqueda<Integer> a=new ArbolBinarioBusqueda<>(listaP, true, true);
+        System.out.println(a);
+        ArbolBinarioBusqueda<Integer> b=new ArbolBinarioBusqueda<>(listaP, false, false);
+        System.out.println(b);
         //System.out.println(Math.ceil(15/2));
         //System.out.println(5/2);
+        /*Lista<Integer> lista=new Lista<Integer>();
+        lista.add(20);
+        lista.add(15);
+        lista.add(10);
+        lista.add(5);
+        lista.add(17);
+        lista.add(2);
+        lista.add(7);
+        lista.add(7);
+        lista.add(12);
+        lista.add(4);
+        lista.add(18);
+        lista.add(19);
+        lista.add(16);
+        lista.add(3);
+        lista.add(30);
+        lista.quitaRepetidos();
+        //System.out.println(lista);
+        //System.out.println(lista);
+        ArbolBinarioBusqueda<Integer> arbolito=new ArbolBinarioBusqueda<Integer>();
+        arbolito=arbolito.buildUnsorted(lista);
+        System.out.println(arbolito);*/
     }
 }

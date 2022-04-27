@@ -64,7 +64,34 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
     }
     
     //##########################################################################################################################################################
+    /**
+     * Metodo constructor
+     */
+    public ArbolBinarioBusqueda(){
+        super();
+    }
 
+    /**
+     * Metodo que construye un arbol a partir de una lista
+     * @param lista la lista con elementos
+     * @param ordenada si la lista esta ordenada o no
+     * @param menorAmayor en caso de estar ordenada, si esta ordenada de menor a mayor
+     */
+    public ArbolBinarioBusqueda(Lista<T> lista, boolean ordenada, boolean menorAmayor){
+        super();
+        ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();
+        if(ordenada){
+            if(!menorAmayor){
+                lista.reverse();
+            }
+            arbol.buildSorted(lista);
+        }else{
+            arbol.buildUnsorted(lista);
+        }
+        this.raiz=arbol.raiz;
+    }
+
+    //##############################################################################################################################################################
     /**
      * Método para añadir un elemento al arbol bst
      * @param elemento
@@ -124,98 +151,54 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      * @return
      */
     //O(nlogn) porque el método add es de O(logn) y este proceso lo hacemos n veces
-    public ArbolBinarioBusqueda<T> buildUnsorted(Lista<T> lista){
+    public void buildUnsorted(Lista<T> lista){
+        if(!this.isEmpty()){
+            throw new IllegalCallerException("Este metodo solo se puede aplicar sobre arboles vacios");
+        }
         ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();//arbol que regresaremos
         Iterator<T> iterador=lista.iterator();//iterador de la lista
         //iteramos la lista y vamos añadiendo cada elemento en el arbol
         for(int i=0;i<lista.size();i++){
             arbol.add(iterador.next());
         }
-        return arbol;//regresamos el arbol creado
+        this.raiz=arbol.raiz;
+        //return arbol;//regresamos el arbol creado
     }
 
     //##################################################################################################################################################################################
 
     /**
-     * Metodo para contruir una arbol a partir de una lista ordenada
-     * @param lista
-     * @return
-     */
-    /*public void buildSorted(Lista<T> lista){
-        if(!isEmpty()){
-            throw new IllegalCallerException("Metodo no aplicable a arboles no vacios");
-        }
-        Iterator<T> iterador=lista.iterator();
-        if(!lista.isEmpty()){
-            raiz=new Vertice(iterador.next());
-        }
-        if(!lista.isEmpty()&&lista.peekCabeza().compareTo(lista.peekUltimo())<0){
-            addListOrdDer(lista, raiz, iterador);
-        }else if(!lista.isEmpty()&&lista.peekCabeza().compareTo(lista.peekUltimo())>0){
-            addListOrdIzq(lista, raiz, iterador);
-        }
-        
-    }*/
-
-    /**
-     * Metodo auxiliar para construir un arbol binario 
-     * @param lista
-     * @param padre
-     * @param iteradorLista
-     */
-    /*private void addListOrdDer(Lista<T> lista, Vertice padre, Iterator<T> iteradorLista){
-       if(iteradorLista.hasNext()){
-           Vertice nuevo=new Vertice(iteradorLista.next());
-           if(!nuevo.elemento.equals(padre.elemento)){
-                padre.derecho=nuevo;
-                addListOrdDer(lista, padre.derecho, iteradorLista);
-           }else{
-               iteradorLista.next();
-               if(iteradorLista.hasNext()){
-                addListOrdDer(lista, padre, iteradorLista);
-               }
-           }
-           
-       }
-    }*/
-
-    /*private void addListOrdIzq(Lista<T> lista, Vertice padre, Iterator<T> iteradorLista){
-        if(iteradorLista.hasNext()){
-            Vertice nuevo=new Vertice(iteradorLista.next());
-            
-            if(!nuevo.elemento.equals(padre.elemento)){
-                padre.izquierdo=nuevo;
-                addListOrdIzq(lista, padre.izquierdo, iteradorLista);
-            }else{
-                iteradorLista.next();
-                if(iteradorLista.hasNext()){
-                    addListOrdIzq(lista, padre, iteradorLista);
-                }
-            }
-        }
-    }*/
-
-    /**
      * Metodo para construir un arbol a partir de una lista ordenada
      * @param lista
      */
+    //Tiempo O(n) porque primero verifica si hay repetidos, lo cual es tiempo n porque elimina los elementos repetidos de la lista en tiempo constante (ya que elimina el primero de la lista solamente)
+    //y luego construimos el arbol binario de abajo hacia arriba.
     public void buildSorted(Lista<T> lista){
         //verificamos que el arbol sobre el que trabajaremos esté vacío y que la lista no sea vacia
-        if(this.isEmpty()&&!lista.isEmpty()){
+        if(!this.isEmpty()){
+            throw new IllegalCallerException("Este metodo solo se puede aplicar sobre arboles vacios");
+        }
+        //ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();
+        /*if(!lista.isEmpty()){
+            lista.quitaRepetidos();
+        }*/
+        if(!lista.isEmpty()){
             Iterator<T> it=lista.iterator();//Hacemos iterador de la lista
             raiz=build(lista, it,1, lista.size());//asignamos a la raiz como el vertice que nos regresa el metodo recursivo
+            this.elementos=lista.size();
         }
+        //return arbol;
     }
 
     /**
-     * Metodo auxiliar recursivo de builsorted
+     * Metodo auxiliar recursivo de builsorted que construye el arbol de abajo hacia arriba
      * @param lista lista con elementos
      * @param iterador iterador de la lista
      * @param empieza posicion de inicio para iterar
      * @param termina posicion en la que se termina de iterar
      * @return Vertice
      */
-    public Vertice build(Lista<T> lista, Iterator<T> iterador, int empieza, int termina){
+    private Vertice build(Lista<T> lista, Iterator<T> iterador, int empieza, int termina){
         //int mitad=0;
         if(termina-empieza>2){
             Vertice v,v1, v2;//hacemos el vertice padre, el izquierdo y derecho
@@ -248,50 +231,6 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
             return null;
         }
     }
-    /*public Vertice build(Lista<T> lista, Iterator<T> iterador, int empieza, int termina){
-        int mitad=0;
-        if(termina-empieza>3){
-            Vertice v,v1, v2;
-            mitad=(termina-empieza)/2;
-            v1=build(lista, iterador, empieza, mitad-1);
-            //if(iterador.hasNext()){
-                v=new Vertice(iterador.next());
-            //}else{
-                //return v1;
-            //}
-            if(iterador.hasNext()){
-                v2=build(lista, iterador, mitad+1, termina);
-                v.izquierdo=v1;
-                v.derecho=v2;
-            }//else{
-              //  v2=null;
-            //}
-            return v;
-        }else if(termina-empieza==3){
-            Vertice actual=new Vertice(iterador.next());
-            actual.padre=new Vertice(iterador.next());
-            actual.padre.izquierdo=actual;
-            actual=actual.padre;
-                actual.derecho=new Vertice(iterador.next());
-                actual.derecho.padre=actual;
-            
-            
-            return actual;
-        }else if(termina-empieza==2){
-            Vertice actual=new Vertice(iterador.next());
-            actual.padre=new Vertice(iterador.next());
-            actual.padre.izquierdo=actual;
-            actual=actual.padre;
-            
-            return actual;
-        }else if(termina-empieza==1){
-            Vertice actual=new Vertice(iterador.next());
-            return actual;
-        }else{
-            return null;
-        }
-    }*/
-
 
     //#################################################################################################################################################################################################
 
