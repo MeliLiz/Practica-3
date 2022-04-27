@@ -3,6 +3,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.lang.IllegalCallerException;
 import java.util.Comparator;
+import java.util.ArrayList;
 
 import src.edd.ArbolBinario;
 import src.edd.Lista;
@@ -207,7 +208,9 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
             v=new Vertice(iterador.next());//asignamos al padre
             v2=build(lista, iterador, empieza+mitad+2, termina);//metodo recursivo para obtener el subarbol derecho
             v.izquierdo=v1;//asignamos el subarbol izquierdo a v
+            v1.padre=v;
             v.derecho=v2;//asignamos el subarbol derecho a v
+            v2.padre=v;
             
             return v;//regresamos al padre v
         }else if(termina-empieza==2){//si la particion es de 3 elementos
@@ -439,6 +442,75 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         raiz.derecho=rotarIzquierda(raiz.derecho);
         return rotarDerecha(raiz);
     }
+    //################################################################################################################################################################################
+    /**
+     * Metodo para balancear un arbol binario de busqueda
+     * @param raiz
+     */
+    public void balance(Vertice raiz){
+        if(raiz==null){
+            throw new IllegalArgumentException("No se puede balancear un arbol vacio");
+        }
+        //Hacemos el arbol para poder tener un iterador
+        ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();
+        arbol.raiz=raiz;
+        //Hacemos el iterador del arbol
+        Iterator<T> iterador=arbol.iterator();
+        ArrayList<T> arreglo=new ArrayList<T>();//Pasamos todos los elementos del arbol a un arreglo
+        while(iterador.hasNext()){
+            arreglo.add(iterador.next());
+        }
+        this.raiz=balancea(arreglo,0,arreglo.size()-1);//la raiz será el vertice regresado por el metodo recursivo
+        
+    }
+
+    /**
+     * Metodo auxiliar de balance
+     * @param arreglo el arreglo con los elementos 
+     * @param inicio la posicion de inicio
+     * @param termina la posicion final
+     * @return Vertice
+     */
+    private Vertice balancea(ArrayList<T> arreglo, int inicio, int termina){
+        if(termina-inicio>2){//si la particion es de mas de 3 elementos
+            int mitad=(termina-inicio)/2;//calculamos la mitad de la particion
+            Vertice v=new Vertice(arreglo.get(inicio+mitad));//El vertice que sera el padre
+            Vertice v1,v2;
+            v1=balancea(arreglo,inicio,inicio+mitad-1);//hacemos la particion izquierda, v1 sera el subarbol izquierdo
+            //System.out.println(v1.elemento);
+            v2=balancea(arreglo, inicio+mitad+1,termina);//hacemos la particion derecha. v2 sera el subarbol derecho
+            //System.out.println(v2.elemento);
+            //Actualizamos referencias
+            v.izquierdo=v1;
+            v1.padre=v;
+            v.derecho=v2;
+            v2.padre=v;
+            return v;//regresamos al vertice padre
+        }else if(termina-inicio==2){//Si la particion es de 3 elementos
+            Vertice v1=new Vertice(arreglo.get(inicio));//vertice de la izquierda
+            Vertice v=new Vertice(arreglo.get(inicio+1));//vertice padre
+            Vertice v2=new Vertice(arreglo.get(termina));//vertice de la derecha
+            //actualixamos referencias
+            v.izquierdo=v1;
+            v.derecho=v2;
+            v1.padre=v2.padre=v;
+            return v;//regresamos al padre
+        }else if(termina-inicio==1){//Si la particion es de dos elementos
+            Vertice v1=new Vertice(arreglo.get(inicio));//vertice de la izquierda
+            Vertice v=new Vertice(arreglo.get(termina));//vertice padre
+            //actualizamos referencias
+            v.izquierdo=v1;
+            v1.padre=v;
+            return v;//regresamos al padre
+        }else if(termina-inicio==0){//Si la particion es de un elemento
+            Vertice v=new Vertice(arreglo.get(inicio));
+            return v;//regresamos al vertice con el elemento
+        }else{
+            return null;
+        }
+    }
+
+
 
     //#####################################################################################################################################################################3
 

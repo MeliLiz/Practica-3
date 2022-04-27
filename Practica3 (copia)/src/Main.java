@@ -64,6 +64,7 @@ public class Main {
         listaP.add(8);
         listaP.add(9);
         listaP.add(10);
+        //listaP.add(30);
         ArbolBinarioBusqueda<Integer> arbolito=new ArbolBinarioBusqueda<Integer>();
         arbolito.buildUnsorted(listaP);
         System.out.println(arbolito);
@@ -98,5 +99,10 @@ public class Main {
         /*ArbolBinarioBusqueda<Integer> arbolito=new ArbolBinarioBusqueda<Integer>();
         arbolito=arbolito.buildUnsorted(lista);
         System.out.println(arbolito);*/
+        System.out.println("*******************************************************");
+        //b.add(30);
+        System.out.println(b);
+        b.balance(b.raiz);
+        System.out.println(b);
     }
 }
