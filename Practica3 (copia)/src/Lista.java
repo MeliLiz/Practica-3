@@ -672,24 +672,27 @@ public class Lista<T> implements Collection<T> {
        return resultado;
     } 
 
+    /**
+     * Metodo para quitar elementos repetidos de una lista ordenada
+     */
     public void quitaRepetidos(){
         if(!this.isEmpty()){
-            Iterator<T> it=this.iterator();
-            Lista<T> listaAux=new Lista<T>();
-            T actual=it.next();
-            while(it.hasNext()){
-                T aux=it.next();
-                if(actual.equals(aux)){
-                    this.eliminaEnPos(0);
-                    actual=aux;
+            Nodo actual=cabeza;
+            Lista<T> aux=new Lista<T>();
+            while(actual.siguiente!=null){
+                if(actual.elemento.equals(actual.siguiente.elemento)){
+                    this.cabeza=cabeza.siguiente;
+                    actual=cabeza;
                 }else{
-                    listaAux.add(actual);
-                    this.eliminaEnPos(0);
-                    actual=aux;
+                    aux.add(actual.elemento);
+                    this.cabeza=cabeza.siguiente;
+                    actual=cabeza;
                 }
             }
-            listaAux.add(actual);
-            this.cabeza=listaAux.cabeza;
+            if(!isEmpty()){
+                aux.add(cabeza.elemento);
+            }
+            this.cabeza=aux.cabeza;
         }
         
         

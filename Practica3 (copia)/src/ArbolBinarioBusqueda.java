@@ -179,9 +179,9 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
             throw new IllegalCallerException("Este metodo solo se puede aplicar sobre arboles vacios");
         }
         //ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();
-        /*if(!lista.isEmpty()){
+        if(!lista.isEmpty()){
             lista.quitaRepetidos();
-        }*/
+        }
         if(!lista.isEmpty()){
             Iterator<T> it=lista.iterator();//Hacemos iterador de la lista
             raiz=build(lista, it,1, lista.size());//asignamos a la raiz como el vertice que nos regresa el metodo recursivo

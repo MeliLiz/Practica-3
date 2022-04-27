@@ -76,7 +76,7 @@ public class Main {
         System.out.println(b);
         //System.out.println(Math.ceil(15/2));
         //System.out.println(5/2);
-        /*Lista<Integer> lista=new Lista<Integer>();
+        Lista<Integer> lista=new Lista<Integer>();
         lista.add(20);
         lista.add(15);
         lista.add(10);
@@ -93,9 +93,9 @@ public class Main {
         lista.add(3);
         lista.add(30);
         lista.quitaRepetidos();
+        System.out.println(lista);
         //System.out.println(lista);
-        //System.out.println(lista);
-        ArbolBinarioBusqueda<Integer> arbolito=new ArbolBinarioBusqueda<Integer>();
+        /*ArbolBinarioBusqueda<Integer> arbolito=new ArbolBinarioBusqueda<Integer>();
         arbolito=arbolito.buildUnsorted(lista);
         System.out.println(arbolito);*/
     }
