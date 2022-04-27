@@ -246,34 +246,11 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      * @return boolean
      */
     public boolean search(Vertice raiz, T elemento){
-        if(elemento==null){
-            throw new IllegalArgumentException();
-        }
-        if(this.isEmpty()){
-            return false;
-        }
-        //Si la el elemento de la raíz es igual al elemento buscado, hemos encontrado al elemento
-        if(raiz.elemento.equals(elemento)){
-            //System.out.println(raiz.altura());
+        Vertice vertice=search2(raiz, elemento);
+        if(vertice!=null){
             return true;
-        }else{//Si el elemento de la raíz no es igual al elemento buscado
-            if(elemento.compareTo(raiz.elemento)<0){   //y el buscado es menor que elelemento de la raíz
-                if(raiz.hayIzquierdo()){   //si la raíz tiene hijo izquierdo
-                    //entonces buscamos en el subarbol izquierdo
-                    return search(raiz.izquierdo, elemento);
-                }else{   //si no tiene hijo izquierdo
-                    return false;//entonces el elemento buscado no está en el arbol
-                }
-            }else{//Si el buscado es mayor que la raíz
-                if(raiz.hayDerecho()){  //y la raíz tiene hijo derecho
-                    //entonces buscamos en el subarbol derecho
-                    return search(raiz.derecho, elemento);
-                }else{ //si no hay hijo derecho
-                    //entonces el elemento no está en el árbol
-                    return false;
-                }
-            }
         }
+        return false;
     }
 
     /**
@@ -282,7 +259,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      * @param elemento
      * @return
      */
-    public Vertice search2(Vertice raiz, T elemento){
+    protected Vertice search2(Vertice raiz, T elemento){
         if(elemento==null){
             throw new IllegalArgumentException();
         }

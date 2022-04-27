@@ -3,7 +3,7 @@ package src.edd;
 import java.util.Iterator;
 
 /**
- * Clase de prueba de la baraja
+ * Clase de prueba de los metodos de arboles
  */
 public class Main {
     public static void main(String[] args){
@@ -31,13 +31,13 @@ public class Main {
         lista.add(3);
         lista.add(30);
         ArbolBinarioBusqueda<Integer> arbol=new ArbolBinarioBusqueda<Integer>();
-        arbol=arbol.buildUnsorted(lista);
+        arbol.buildUnsorted(lista);
         System.out.println(arbol);
-        System.out.println(arbol.buscaElemento(2));
-        ArbolBinarioBusqueda<Integer> arbol1=new ArbolBinarioBusqueda<Integer>();
-        arbol1.convertBST(arbol);
-        System.out.println(arbol1);
         System.out.println(arbol.buscaElemento(2));*/
+        //ArbolBinarioBusqueda<Integer> arbol1=new ArbolBinarioBusqueda<Integer>();
+        //arbol1.convertBST(arbol);
+        //System.out.println(arbol1);
+        //System.out.println(arbol.buscaElemento(2));
         //System.out.println(arbol.buscReg(2));
         //System.out.println(arbol.auxiliar(5));
         //System.out.println(arbol.auxiliar(31));
@@ -101,11 +101,11 @@ public class Main {
         System.out.println(arbolito);*/
         System.out.println("*******************************************************");
         //b.add(30);
-        /*ArbolBinario.Vertice vertice=b.search2(b.raiz, 6);
+        ArbolBinario.Vertice vertice=b.search2(b.raiz, 6);
         b.balance(vertice);
-        System.out.println(b);*/
-        
-        b.balance(b.raiz);
         System.out.println(b);
+        
+        //b.balance(b.raiz);
+        //System.out.println(b);
     }
 }
