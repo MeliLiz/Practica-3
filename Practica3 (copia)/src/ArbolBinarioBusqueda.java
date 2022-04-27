@@ -277,6 +277,43 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
     }
 
     /**
+     * Metodo que regresa el vertice en el que se encuentra el elemento. En caso de que el elemento no esté, regresa null.
+     * @param raiz
+     * @param elemento
+     * @return
+     */
+    public Vertice search2(Vertice raiz, T elemento){
+        if(elemento==null){
+            throw new IllegalArgumentException();
+        }
+        if(this.isEmpty()){
+            return null;
+        }
+        //Si la el elemento de la raíz es igual al elemento buscado, hemos encontrado al elemento
+        if(raiz.elemento.equals(elemento)){
+            //System.out.println(raiz.altura());
+            return raiz;
+        }else{//Si el elemento de la raíz no es igual al elemento buscado
+            if(elemento.compareTo(raiz.elemento)<0){   //y el buscado es menor que elelemento de la raíz
+                if(raiz.hayIzquierdo()){   //si la raíz tiene hijo izquierdo
+                    //entonces buscamos en el subarbol izquierdo
+                    return search2(raiz.izquierdo, elemento);
+                }else{   //si no tiene hijo izquierdo
+                    return null;//entonces el elemento buscado no está en el arbol
+                }
+            }else{//Si el buscado es mayor que la raíz
+                if(raiz.hayDerecho()){  //y la raíz tiene hijo derecho
+                    //entonces buscamos en el subarbol derecho
+                    return search2(raiz.derecho, elemento);
+                }else{ //si no hay hijo derecho
+                    //entonces el elemento no está en el árbol
+                    return null;
+                }
+            }
+        }
+    }
+
+    /**
      * Metodo para buscar un elemento en el arbol actual
      * @param elemento el elemento a buscar
      * @return
@@ -467,8 +504,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
                 if(p.izquierdo.elemento.equals(vertice.elemento)){
                     izq=true;
                 }
-            }
-            
+            }   
         }
         //Hacemos el arbol para poder tener un iterador
         ArbolBinarioBusqueda<T> arbol=new ArbolBinarioBusqueda<T>();
@@ -480,7 +516,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
             arreglo.add(iterador.next());
         }
         
-        vertice=balancea(arreglo,0,arreglo.size()-1);//la raiz será el vertice regresado por el metodo recursivo
+        vertice=balancea(arreglo,0,arreglo.size()-1);//la raiz del arbol balanceado será el vertice regresado por el metodo recursivo
         vertice.padre=p;
         if(p!=null){
             if(der){
@@ -492,7 +528,6 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         }else{
             this.raiz=vertice;
         }
-        
     }
 
     /**
