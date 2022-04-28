@@ -1,12 +1,13 @@
 Estructuras de Datos
-Proyecto 1: Wizard
+Practica 3
 
 Nombres:
 Fernández Blancas Melissa Lizbeth
 Osorio Morales Fernanda Ameyalli
 
 Para compilar: javac -d . src/*.java
-Para ejecutar: java src.edd.Wizard
+Para ejecutar: java src.edd.P3
+Para ejecutar el archivo de pruebas del arbol: java src.edd.Main
 
 El proyecto está estructurado de manera que las clases están en la carpeta src y la clase principal que se 
 ejecuta es la clase Wizard. 

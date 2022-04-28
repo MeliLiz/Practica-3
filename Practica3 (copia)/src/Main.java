@@ -108,8 +108,8 @@ public class Main {
         System.out.println(b);
         b.delete(b.raiz, 7);
         System.out.println(b);*/
-        b.delete(b.raiz, 8);
-        System.out.println(b);
+        //b.delete(b.raiz, 8);
+        //System.out.println(b);
         
         //b.balance(b.raiz);
         //System.out.println(b);

@@ -514,6 +514,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      * @param termina la posicion final
      * @return Vertice
      */
+    //Este metodo funciona similar a buildsorted solo que construyendo el arbol de arriba hacia abajo
     private Vertice balancea(ArrayList<T> arreglo, int inicio, int termina){
         if(termina-inicio>2){//si la particion es de mas de 3 elementos
             int mitad=(termina-inicio)/2;//calculamos la mitad de la particion
@@ -555,103 +556,8 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
 
     //######################################################################################################################################################################
 
-    /**
-     * Metodo para borrar un elemento en el arbol.
-     * @param root
-     * @param elemento
-     */
-    public void delete(Vertice root, T elemento){
-        if(elemento==null){//si el elemento es null, lanzar error
-            throw new IllegalArgumentException("No se puede eliminar un elemento vacio");
-        }
-        if(root==null){//si la raiz es null, lanzar error
-            throw new IllegalArgumentException("No se puede eliminar un elemento de un arbol vacio");
-        }
-        Vertice aEliminar=search2(raiz, elemento);//obtenemos el vertice con el elemento a eliminar
-        if(!aEliminar.hayDerecho()&&!aEliminar.hayIzquierdo()){//si el vertice no tiene hijos
-            //si el vertice obtenido tiene padre, debemos cambiar su referencia a null(hacia donde esta el vertice a eliminar)
-            if(aEliminar.hayPadre()){
-                Vertice p=aEliminar.padre;//el padre del vertice a eliminar
-                if(p.hayDerecho()){
-                    if(p.derecho.elemento.equals(elemento)){//caso en que el vertice a eliminar es el hijo derecho del padre
-                        p.derecho=null;
-                    }
-                }
-                if(p.hayIzquierdo()){
-                    if(p.izquierdo.elemento.equals(elemento)){//caso en que el vertice a eliminar es el hijo izquierdo del padre
-                        p.izquierdo=null;
-                    }
-                }
-            }else{//si el vertice no tiene padre, entonces es poque es la raiz de todo el arbol, así que la ponemos en null
-                this.raiz=null;
-            }
-            elementos--;//disminuimos el numero de elementos del arbol
-        }else if(!aEliminar.hayDerecho()&&aEliminar.hayIzquierdo()){//si el vertice solo tiene hijo izquierdo
-            //si el vertice tiene padre debemos cambiar la referencia del padre a su hijo y la refeerencia del hijo del vertice para que su padre sea el padre del que se eliminara
-            if(aEliminar.hayPadre()){
-                Vertice p=aEliminar.padre;//el padre del vertice a eliminar
-                if(p.hayDerecho()){//caso en el que el vertice a eliminar es hijo derecho del padre
-                    if(p.derecho.elemento.equals(elemento)){
-                        p.derecho=aEliminar.izquierdo;//cambiamos la referencia del padre hacia el nuevo hijo
-                        aEliminar.izquierdo.padre=p;//cambiamos la referencia del nuevo hijo hacia el padre
-                    }
-                }
-                if(p.hayIzquierdo()){//caso en el que el vertice a eliminar es hijo izquierdo del padre
-                    if(p.izquierdo.elemento.equals(elemento)){
-                        p.izquierdo=aEliminar.izquierdo;//cambiamos la referencia del padre hacia el nuevo hijo
-                        aEliminar.izquierdo.padre=p;//cambiamos la referencia del nuevo hijo hacia el padre
-                    }
-                }
-            }else{//si no hay padre, es porque el vertice a eliminar es la raiz de todo el arbol
-                this.raiz=aEliminar.izquierdo;
-            }
-            elementos--;//disminuimos el numero de elementos del arbol
-        }else if(aEliminar.hayDerecho()&&!aEliminar.hayIzquierdo()){//si el vertice solo tiene hijo derecho
-            //Si el vertice tiene padre
-            if(aEliminar.hayPadre()){
-                Vertice p=aEliminar.padre;//padre del vertice a eliminar
-                if(p.hayDerecho()){//caso en el que el vertice a eliminar es hijo derecho del padre
-                    if(p.derecho.elemento.equals(elemento)){
-                        //cambiamos referencias
-                        p.derecho=aEliminar.derecho;
-                        aEliminar.derecho.padre=p;
-                    }
-                }
-                if(p.hayIzquierdo()){
-                    if(p.izquierdo.elemento.equals(elemento)){//caso en el que el vertice a eliminar es hijo izquierdo del padre
-                        //cambiamos referencias
-                        p.izquierdo=aEliminar.derecho;
-                        aEliminar.derecho.padre=p;
-                    }
-                }
-            }else{//si no hay padre es porque el vertice a eliminar es la raiz de todo el arbol
-                this.raiz=aEliminar.derecho;
-            }
-            elementos--;
-        }else{ //si el vertice tiene dos hijos
-            Vertice actual=aEliminar.derecho;
-            Vertice minimo=buscaMinimo(actual);//obtenemos el vertice mas a la izquierda del subarbol derecho (minimo)
-            T elem=minimo.elemento;//guardamos su elemento
-            delete(aEliminar, elem);//borramos el elemento minimo
-            aEliminar.elemento=elem;//en el verice que queriamos borrar guardamos el elemento que era el minimo
-            elementos--;//disminuimos el numero de elementos
-        }
-    }
 
-    /**
-     * Metodo auxiliar de delete para encontrar el elemento minimo de un arbol
-     * @param vertice
-     * @return Vertice
-     */
-    private Vertice buscaMinimo(Vertice vertice){
-        if(vertice.hayIzquierdo()){
-            return buscaMinimo(vertice.izquierdo);
-        }else{
-            //System.out.println(vertice);
-            return vertice;
-        }
-    }
-
+   
 
     //#####################################################################################################################################################################3
 
