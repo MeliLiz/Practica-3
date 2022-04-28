@@ -104,6 +104,12 @@ public class Main {
         ArbolBinario.Vertice vertice=b.search2(b.raiz, 6);
         b.balance(vertice);
         System.out.println(b);
+        /*b.delete(b.raiz, 9);
+        System.out.println(b);
+        b.delete(b.raiz, 7);
+        System.out.println(b);*/
+        b.delete(b.raiz, 8);
+        System.out.println(b);
         
         //b.balance(b.raiz);
         //System.out.println(b);

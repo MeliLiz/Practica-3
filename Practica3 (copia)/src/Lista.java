@@ -693,6 +693,7 @@ public class Lista<T> implements Collection<T> {
                 aux.add(cabeza.elemento);
             }
             this.cabeza=aux.cabeza;
+            this.longi=aux.longi;
         }
         
         

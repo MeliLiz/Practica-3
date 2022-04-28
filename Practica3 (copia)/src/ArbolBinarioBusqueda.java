@@ -553,6 +553,111 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
         }
     }
 
+    //######################################################################################################################################################################
+
+    public void delete(Vertice root, T elemento){
+        if(elemento==null){
+            throw new IllegalArgumentException("No se puede eliminar un elemento vacio");
+        }
+        if(root==null){
+            throw new IllegalArgumentException("No se puede eliminar un elemento de un arbol vacio");
+        }
+        Vertice aEliminar=search2(raiz, elemento);
+        if(!aEliminar.hayDerecho()&&!aEliminar.hayIzquierdo()){//si el vertice no tiene hijos
+            if(aEliminar.hayPadre()){
+                Vertice p=aEliminar.padre;
+                if(p.hayDerecho()){
+                    if(p.derecho.elemento.equals(elemento)){
+                        p.derecho=null;
+                    }
+                }
+                if(p.hayIzquierdo()){
+                    if(p.izquierdo.elemento.equals(elemento)){
+                        p.izquierdo=null;
+                    }
+                }
+            }else{
+                root=null;
+            }
+        }else if(!aEliminar.hayDerecho()&&aEliminar.hayIzquierdo()){//si el vertice solo tiene hijo izquierdo
+            if(aEliminar.hayPadre()){
+                Vertice p=aEliminar.padre;
+                if(p.hayDerecho()){
+                    if(p.derecho.elemento.equals(elemento)){
+                        p.derecho=aEliminar.izquierdo;
+                        aEliminar.izquierdo.padre=p;
+                    }
+                }
+                if(p.hayIzquierdo()){
+                    if(p.izquierdo.elemento.equals(elemento)){
+                        p.izquierdo=aEliminar.izquierdo;
+                        aEliminar.izquierdo.padre=p;
+                    }
+                }
+            }else{
+                root=aEliminar.izquierdo;
+            }
+        }else if(aEliminar.hayDerecho()&&!aEliminar.hayIzquierdo()){//si el vertice solo tiene hijo derecho
+            if(aEliminar.hayPadre()){
+                Vertice p=aEliminar.padre;
+                if(p.hayDerecho()){
+                    if(p.derecho.elemento.equals(elemento)){
+                        p.derecho=aEliminar.derecho;
+                        aEliminar.derecho.padre=p;
+                    }
+                }
+                if(p.hayIzquierdo()){
+                    if(p.izquierdo.elemento.equals(elemento)){
+                        p.izquierdo=aEliminar.derecho;
+                        aEliminar.derecho.padre=p;
+                    }
+                }
+            }else{
+                root=aEliminar.derecho;
+            }
+        }else{
+            //System.out.println(aEliminar);
+            Vertice actual=aEliminar.derecho;
+            Vertice minimo=buscaMinimo(actual);
+            //System.out.println(minimo);
+            T elem=minimo.elemento;
+            //System.out.println(aEliminar);
+            delete(aEliminar, elem);
+            aEliminar.elemento=elem;
+            //root.elemento=elem;
+            /*Vertice cambia=new Vertice(elem);
+            if(root.hayPadre()){
+                Vertice p=aEliminar.padre;
+                if(p.hayDerecho()){
+                    if(p.derecho.elemento.equals(elemento)){
+                        p.derecho=cambia;
+                        cambia.padre=p;
+                    }
+                }
+                if(p.hayIzquierdo()){
+                    if(p.izquierdo.elemento.equals(elemento)){
+                        p.izquierdo=cambia;
+                        cambia.padre=p;
+                    }
+                }
+            }
+            cambia.derecho=root.derecho;
+            cambia.izquierdo=root.izquierdo;
+            cambia.derecho.padre=cambia;
+            cambia.izquierdo.padre=cambia;*/
+        }
+        
+    
+    }
+
+    public Vertice buscaMinimo(Vertice vertice){
+        if(vertice.hayIzquierdo()){
+            return buscaMinimo(vertice.izquierdo);
+        }else{
+            //System.out.println(vertice);
+            return vertice;
+        }
+    }
 
 
     //#####################################################################################################################################################################3
