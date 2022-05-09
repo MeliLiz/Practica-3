@@ -119,7 +119,7 @@ public class Main {
         System.out.println(arbol);
         arbol.insertar(7);
         System.out.println(arbol);
-        arbol.delete(15);
+        arbol.delete(21);
         System.out.println(arbol);
         
     }

@@ -71,13 +71,13 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
     private VerticeAVL balancear(VerticeAVL v){
         if(v!=null){
             VerticeAVL a=null;
-            System.out.println("Verice: "+v);
-            System.out.println("Derecho: "+altura(convertirVertice(v.derecho)));
-            System.out.println("Izquierdo: "+altura(convertirVertice(v.izquierdo)));
+            //System.out.println("Verice: "+v);
+            //System.out.println("Derecho: "+altura(convertirVertice(v.derecho)));
+            //System.out.println("Izquierdo: "+altura(convertirVertice(v.izquierdo)));
             if(altura(izquierdo(v))-altura(derecho(v))==2){
                 if(v.hayIzquierdo()){
-                    System.out.println("altura izq izq "+altura(convertirVertice(v.izquierdo.izquierdo)));
-                    System.out.println("altura izq der "+altura(convertirVertice(v.izquierdo.derecho)));
+                    //System.out.println("altura izq izq "+altura(convertirVertice(v.izquierdo.izquierdo)));
+                    //System.out.println("altura izq der "+altura(convertirVertice(v.izquierdo.derecho)));
                     if(altura(convertirVertice(v.izquierdo.izquierdo))>=altura(convertirVertice(v.izquierdo.derecho))){
                         a=rotar(v,true);
                     }
@@ -125,7 +125,7 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 }
                 if(aux!=null){
                     aux.derecho=vertice;
-                    vertice.padre=aux.derecho;
+                    vertice.padre=aux;
                 }
                 //rotarIzquierda(vertice);
             }else{
@@ -134,9 +134,9 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 if(vertice.derecho!=null){
                     vertice.derecho.padre=vertice;
                 }
-                if(aux.hayIzquierdo()){
+                if(aux!=null){//.hayIzquierdo()
                     aux.izquierdo=vertice;
-                    vertice.padre=aux.izquierdo;
+                    vertice.padre=aux;
                 }
                 //rotarDerecha(vertice);
             }
@@ -223,8 +223,8 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 
             }
             VerticeAVL padre=balancear(vertice);
-            System.out.println(vertice);
-            System.out.println(vertice.izquierdo);
+            //System.out.println(vertice);
+            //System.out.println(vertice.izquierdo);
             actualizarAltura(vertice);
             return padre;
         }
@@ -237,7 +237,7 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
         }else{
             raiz=eliminar(convertirVertice(raiz),elemento);
             elementos--;
-            System.out.println(raiz);
+            //System.out.println(raiz);
         }
     }
 
@@ -258,6 +258,8 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
         }else{
             if(!vertice.hayDerecho()&&!vertice.hayIzquierdo()){
                 if(vertice.hayPadre()){
+                    System.out.println("Vertice: "+vertice);
+                    System.out.println("Padre: "+vertice.padre);
                     if(vertice.padre.hayIzquierdo()&&vertice.padre.izquierdo.elemento.equals(vertice.elemento)){
                         vertice.padre.izquierdo=null;
                     }else{
@@ -266,7 +268,11 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 }else{
                     raiz=null;
                 }
+                //System.out.println(vertice);
+                //System.out.println(vertice.padre);
+                //System.out.println(vertice.padre.derecho);
                 vertice=null;
+                
             }else if(!vertice.hayIzquierdo()){
                 if(vertice.hayPadre()){
                     if(vertice.padre.hayIzquierdo()&&vertice.padre.izquierdo.elemento.equals(vertice.elemento)){
@@ -294,15 +300,18 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 //aux=vertice;
                 //vertice=convertirVertice(vertice.izquierdo);
             }else{
-                vertice.elemento=eliminarMinimo(convertirVertice(vertice.derecho));
+                T b=encontrarMin(convertirVertice(vertice.derecho));
+                eliminar(convertirVertice(raiz), b);
+                vertice.elemento=b;
             }
         }
         VerticeAVL padre=balancear(vertice);
+        System.out.println(padre);
         actualizarAltura(vertice);
         return padre;
     }
 
-    private T eliminarMinimo(VerticeAVL vertice){
+    /*private T eliminarMinimo(VerticeAVL vertice){
         if(vertice!=null){
             if(vertice.izquierdo!=null){
                 T b=eliminarMinimo(convertirVertice(vertice.izquierdo));
@@ -311,10 +320,25 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 return b;
             }else{
                 T b=vertice.elemento;
-                eliminar(convertirVertice(raiz),b);
+                //System.out.println(b);
+                raiz=eliminar(convertirVertice(raiz),b);
                 //vertice=derecho(vertice);
                 balancear(vertice);
                 actualizarAltura(vertice);
+                return b;
+            }
+        }else{
+            throw new IllegalCallerException("No se puede usar este metodo con un vertice vacío");
+        }
+    }*/
+
+    private T encontrarMin(VerticeAVL vertice){
+        if(vertice!=null){
+            if(vertice.izquierdo!=null){
+                T b=encontrarMin(convertirVertice(vertice.izquierdo));
+                return b;
+            }else{
+                T b=vertice.elemento;
                 return b;
             }
         }else{
