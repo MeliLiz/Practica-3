@@ -92,6 +92,8 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 }else{
                     a=rotar2(v,false);
                 }
+            }else{
+                a=v;
             }
             return a;
         }
@@ -227,6 +229,97 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
             return padre;
         }
         return null;
+    }
+
+    public void delete(T elemento){
+        if(elemento==null){
+            throw new IllegalArgumentException("No se puede eliminar un elemento vacio");
+        }else{
+            raiz=eliminar(convertirVertice(raiz),elemento);
+            elementos--;
+            System.out.println(raiz);
+        }
+    }
+
+    private VerticeAVL eliminar(VerticeAVL vertice, T elemento){
+        if(vertice==null){//si el vertice es vacío no podemos aplicar el metodo
+            throw new IllegalArgumentException("El vertice es vacio");
+        }
+        //Si el elemento no está en el árbol no podemos eliminarlo
+        Vertice a=search2(raiz, elemento);
+        if(a==null){
+            throw new IllegalArgumentException("El elemento a eliminar no se encuentra en el arbol");
+        }
+        //VerticeAVL aux;
+        if(elemento.compareTo(vertice.elemento)<0){//si el elemento buscado es menor que el del vertice nos vamos a la izquierda
+            eliminar(convertirVertice(vertice.izquierdo),elemento);
+        }else if(elemento.compareTo(vertice.elemento)>0){//si es mayor nos vamos a la derecha
+            eliminar(convertirVertice(vertice.derecho), elemento);
+        }else{
+            if(!vertice.hayDerecho()&&!vertice.hayIzquierdo()){
+                if(vertice.hayPadre()){
+                    if(vertice.padre.hayIzquierdo()&&vertice.padre.izquierdo.elemento.equals(vertice.elemento)){
+                        vertice.padre.izquierdo=null;
+                    }else{
+                        vertice.padre.derecho=null;
+                    }
+                }else{
+                    raiz=null;
+                }
+                vertice=null;
+            }else if(!vertice.hayIzquierdo()){
+                if(vertice.hayPadre()){
+                    if(vertice.padre.hayIzquierdo()&&vertice.padre.izquierdo.elemento.equals(vertice.elemento)){
+                        vertice.padre.izquierdo=vertice.derecho;
+                    }else{
+                        vertice.padre.derecho=vertice.derecho;
+                    }
+                    vertice.derecho.padre=vertice.padre;
+                }else{
+                    raiz=vertice.derecho;
+                }
+                //aux=vertice;
+                //vertice=convertirVertice(vertice.derecho);
+            }else if(!vertice.hayDerecho()){
+                if(vertice.hayPadre()){
+                    if(vertice.padre.izquierdo.elemento.equals(vertice.elemento)){
+                        vertice.padre.izquierdo=vertice.izquierdo;
+                    }else{
+                        vertice.padre.derecho=vertice.izquierdo;
+                    }
+                    vertice.izquierdo.padre=vertice.padre;
+                }else{
+                    raiz=vertice.izquierdo;
+                }
+                //aux=vertice;
+                //vertice=convertirVertice(vertice.izquierdo);
+            }else{
+                vertice.elemento=eliminarMinimo(convertirVertice(vertice.derecho));
+            }
+        }
+        VerticeAVL padre=balancear(vertice);
+        actualizarAltura(vertice);
+        return padre;
+    }
+
+    private T eliminarMinimo(VerticeAVL vertice){
+        if(vertice!=null){
+            if(vertice.izquierdo!=null){
+                T b=eliminarMinimo(convertirVertice(vertice.izquierdo));
+                balancear(vertice);
+                actualizarAltura(vertice);
+                return b;
+            }else{
+                T b=vertice.elemento;
+                eliminar(convertirVertice(raiz),b);
+                //vertice=derecho(vertice);
+                balancear(vertice);
+                actualizarAltura(vertice);
+                return b;
+            }
+        }else{
+            throw new IllegalCallerException("No se puede usar este metodo con un vertice vacío");
+        }
     }
 
     
