@@ -54,7 +54,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
 
     @Override public void add(T elemento){
         if(elemento==null){
-            throw new IllegalArgumentException("No se puede agregaer un elemento vacío");
+            throw new IllegalArgumentException("No se puede agregar un elemento vacío");
         }
         if(isEmpty()){
             this.raiz=new VerticeAVL(elemento);
@@ -87,6 +87,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                     alturaDerecha=convertirVertice(padre.derecho).getAltura();
                 }
                 if(alturaIzquierda-alturaDerecha>1){
+                    //ver si es hijo izquierdo o derecho
+                    System.out.println("Entra al if");
+                    System.out.println("elem: "+padre.elemento);
+                    System.out.println("Altura derecha: "+alturaDerecha);
+                    System.out.println("Altura izquierda: "+alturaIzquierda);
                     if(elemento.compareTo(padre.izquierdo.elemento)<0){//si el elemento es menor que el izquierdo del padre
                         padre=rotarDerecha(padre);//rotamos una vez a la derecha
                     }else{//si no
@@ -124,17 +129,19 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                     }     
                 }
             }
-            int hIzq=-1;
-            int hDer=-1;
-            if(padre.hayIzquierdo()){
-                hIzq=convertirVertice(padre.izquierdo).getAltura();
-            }
-            if(padre.hayDerecho()){
-                hDer=convertirVertice(padre.derecho).getAltura();
-            }
-            VerticeAVL p=convertirVertice(padre);
-            p.altura=1+Math.max(hIzq, hDer);
         }  
+        int hIzq=-1;
+        int hDer=-1;
+        if(padre.hayIzquierdo()){
+            hIzq=convertirVertice(padre.izquierdo).getAltura();
+        }
+        if(padre.hayDerecho()){
+            hDer=convertirVertice(padre.derecho).getAltura();
+        }
+        VerticeAVL p=convertirVertice(padre);
+        p.altura=1+Math.max(hIzq, hDer);
+        System.out.println("Elemento: "+p.elemento+" Altura: " + p.altura);
+        System.out.println("Altura derecha "+hDer+" Altura izquierda "+ hIzq);
         return padre;
     }
 
@@ -203,17 +210,6 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 }
             }
 
-            int alturaIzq=-1;
-            int alturaDer=-1;
-            if(padre.hayIzquierdo()){
-                alturaIzq=convertirVertice(padre.izquierdo).getAltura();
-            }
-            if(padre.hayDerecho()){
-                alturaDer=convertirVertice(padre.derecho).getAltura();
-            }
-            VerticeAVL p=convertirVertice(padre);
-            p.altura=Math.max(alturaIzq, alturaDer);
-
         }else if(elemento.compareTo(padre.elemento)<0){
             if(padre.hayIzquierdo()){
                 auxDel(padre.izquierdo, elemento);
@@ -273,9 +269,20 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                         padre=rotarDerecha2(padre);
                     }
                 }
-        }
+            }
         
         }
+        int alturaIzq=-1;
+        int alturaDer=-1;
+        if(padre.hayIzquierdo()){
+            alturaIzq=convertirVertice(padre.izquierdo).getAltura();
+        }
+        if(padre.hayDerecho()){
+            alturaDer=convertirVertice(padre.derecho).getAltura();
+        }
+        VerticeAVL p=convertirVertice(padre);
+        p.altura=1+Math.max(alturaIzq, alturaDer);
+        System.out.println("Elemento: "+p.elemento+" Altura: " + p.altura);
         return padre;
     }
 
@@ -283,4 +290,6 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
         VerticeAVL vertice=(VerticeAVL) v;
         return vertice;
     }
+
+    
 }

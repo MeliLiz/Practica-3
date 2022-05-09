@@ -110,7 +110,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
      * Método para añadir un elemento al arbol bst
      * @param elemento
      */
-    public void insert(T elemento){
+    public Vertice insert(T elemento){
         if(elemento==null){
             throw new IllegalArgumentException();
         }
@@ -123,6 +123,7 @@ public class ArbolBinarioBusqueda<T extends Comparable> extends ArbolBinario<T> 
             Vertice aux=raiz;
             verifica(nuevo, aux);
         }
+        return nuevo;
     }
 
 

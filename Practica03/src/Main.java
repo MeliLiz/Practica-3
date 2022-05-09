@@ -81,26 +81,43 @@ public class Main {
         System.out.println("Probamos el toString");
         System.out.println(b.toString2());*/
 
-        ArbolAVL<Integer> arbol=new ArbolAVL();
+        /*ArbolAVL<Integer> arbol=new ArbolAVL();
+        System.out.println("Añadimos el primer elemento 21");
         arbol.add(21);
         System.out.println(arbol);
+        System.out.println("Añadimos el 15");
         arbol.add(15);
         System.out.println(arbol);
+        System.out.println("Añadimos el 7");
         arbol.add(7);
         System.out.println(arbol);
+        System.out.println("Añadimos el 1");
         arbol.add(1);
         System.out.println(arbol);
+        System.out.println("Añadimos el 0");
         arbol.add(0);
         System.out.println(arbol);
+        System.out.println("Añadimos el -1");
         arbol.add(-1);
         System.out.println(arbol);
+        System.out.println("Añadimos el -2");
         arbol.add(-2);
         System.out.println(arbol);
+        System.out.println("Borramos el 1");
         arbol.delete(1);
         System.out.println(arbol);
+        System.out.println("Borramos el -1");
         arbol.delete(-1);
         System.out.println(arbol);
+        System.out.println("Borramos el 0");
         arbol.delete(0);
+        System.out.println(arbol);*/
+
+        ArbolAVL3<Integer> arbol=new ArbolAVL3<Integer>();
+        arbol.insertar(21);
+        arbol.insertar(15);
+        System.out.println(arbol);
+        arbol.insertar(7);
         System.out.println(arbol);
         
     }
