@@ -176,37 +176,6 @@ public class ArbolAVL4<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
        
     }
 
-    protected Vertice rotarDerecha(Vertice raiz){
-        if(!raiz.hayIzquierdo()){//si el vertice a rotsar no tiene hijo izquierdo
-            throw new IllegalArgumentException("No se puede rotar a la derecha");//no podemos hacer la rotación
-        }
-        Vertice izquierdo=raiz.izquierdo;
-        raiz.izquierdo=izquierdo.derecho;
-        if(raiz.izquierdo!=null){
-            raiz.izquierdo.padre=raiz;
-        }
-        
-        izquierdo.derecho=raiz;
-        raiz.padre=izquierdo;
-        return izquierdo;//raíz nueva
-    }
-
-    protected Vertice rotarIzquierda(Vertice raiz){
-        if(!raiz.hayDerecho()){//si el vertice a rotsar no tiene hijo derecho
-            throw new IllegalArgumentException("No se puede rotar a la izquierda");//no podemos hacer la rotación
-        }
-        Vertice derecho=raiz.derecho;
-        raiz.derecho=derecho.izquierdo;
-        if(raiz.derecho!=null){
-            raiz.derecho.padre=raiz;
-        }
-        
-        derecho.izquierdo=raiz;
-        raiz.padre=derecho;
-        
-        return derecho;//raíz nueva
-    }
-
 
     public VerticeAVL rotar2(VerticeAVL vertice, boolean izquierda){
         if(izquierda){
@@ -283,7 +252,7 @@ public class ArbolAVL4<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 
             }
             VerticeAVL padre=balancear(vertice);
-            System.out.println("Vertice: "+vertice+" Padre: "+padre);
+            //System.out.println("Vertice: "+vertice+" Padre: "+padre);
             //System.out.println(vertice.izquierdo);
             actualizarAltura(vertice);
             return padre;
@@ -318,8 +287,8 @@ public class ArbolAVL4<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
         }else{
             if(!vertice.hayDerecho()&&!vertice.hayIzquierdo()){
                 if(vertice.hayPadre()){
-                    System.out.println("Vertice: "+vertice);
-                    System.out.println("Padre: "+vertice.padre);
+                    //System.out.println("Vertice: "+vertice);
+                    //System.out.println("Padre: "+vertice.padre);
                     if(vertice.padre.hayIzquierdo()&&vertice.padre.izquierdo.elemento.equals(vertice.elemento)){
                         vertice.padre.izquierdo=null;
                     }else{
@@ -366,7 +335,7 @@ public class ArbolAVL4<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
             }
         }
         VerticeAVL padre=balancear(vertice);
-        System.out.println(padre);
+        //System.out.println(padre);
         actualizarAltura(vertice);
         return padre;
     }

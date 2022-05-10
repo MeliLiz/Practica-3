@@ -114,20 +114,35 @@ public class Main {
         System.out.println(arbol);*/
 
         ArbolAVL4<Integer> arbol=new ArbolAVL4<Integer>();
+        System.out.println("Agregamos el 21 y el 15");
         arbol.insertar(21);
         arbol.insertar(15);
         System.out.println(arbol);
+        System.out.println("Agregamos el 7");
         arbol.insertar(7);
         System.out.println(arbol);
+        System.out.println("Agregamos el 80");
         arbol.insertar(80);
         
         System.out.println(arbol);
+        System.out.println("Agregamos el 79");
         arbol.insertar(79);
         //arbol.delete(21);
         System.out.println(arbol);
+        System.out.println("Agregamos el 8");
         arbol.insertar(8);
         System.out.println(arbol);
+        System.out.println("Agregamos el 60");
         arbol.insertar(60);
+        System.out.println(arbol);
+        System.out.println("Eliminamos el 21");
+        arbol.delete(21);
+        System.out.println(arbol);
+        System.out.println("Eliminamos el 8");
+        arbol.delete(8);
+        System.out.println(arbol);
+        System.out.println("Eliminamos el 15");
+        arbol.delete(15);
         System.out.println(arbol);
         
     }
