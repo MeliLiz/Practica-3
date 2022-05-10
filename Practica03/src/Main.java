@@ -113,13 +113,21 @@ public class Main {
         arbol.delete(0);
         System.out.println(arbol);*/
 
-        ArbolAVL3<Integer> arbol=new ArbolAVL3<Integer>();
+        ArbolAVL4<Integer> arbol=new ArbolAVL4<Integer>();
         arbol.insertar(21);
         arbol.insertar(15);
         System.out.println(arbol);
         arbol.insertar(7);
         System.out.println(arbol);
-        arbol.delete(21);
+        arbol.insertar(80);
+        
+        System.out.println(arbol);
+        arbol.insertar(79);
+        //arbol.delete(21);
+        System.out.println(arbol);
+        arbol.insertar(8);
+        System.out.println(arbol);
+        arbol.insertar(60);
         System.out.println(arbol);
         
     }

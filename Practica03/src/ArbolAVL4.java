@@ -2,7 +2,7 @@ package src.edd;
 
 import src.edd.ArbolBinarioBusqueda;
 
-public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
+public class ArbolAVL4<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
     /**
      * Clase interna protegida para vértices de árboles AVL. La única
      * diferencia con los vértices tienen altura
@@ -60,63 +60,35 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
         }
     }
 
-    public ArbolAVL3(){
+    public ArbolAVL4(){
         super();
     }
 
-    public ArbolAVL3(Collection<T> coleccion){
+    public ArbolAVL4(Collection<T> coleccion){
         super(coleccion);
     }
 
     private VerticeAVL balancear(VerticeAVL v){
         if(v!=null){
             VerticeAVL a=null;
-            /*System.out.println("Verice: "+v);
-            System.out.println("Derecho: "+altura(convertirVertice(v.derecho)));
-            System.out.println("Izquierdo: "+altura(convertirVertice(v.izquierdo)));
-            if((altura(izquierdo(v))+1)-(altura(derecho(v))+1)==2){
-                if(v.hayIzquierdo()){
-                    System.out.println("altura izq izq "+altura(convertirVertice(v.izquierdo.izquierdo)));
-                    System.out.println("altura izq der "+altura(convertirVertice(v.izquierdo.derecho)));
-                    if(altura(convertirVertice(v.izquierdo.izquierdo))>=altura(convertirVertice(v.izquierdo.derecho))){
-                        a=rotar(v,true);
-                    }else{
-                        a=rotar2(v,true);
-                    }
-                }else{
-                    a=rotar2(v,true);
-                } 
-            }else if((altura(derecho(v))+1)-(altura(izquierdo(v))+1)==2){
-                if(v.hayDerecho()){
-                    if(altura(convertirVertice(v.derecho.derecho))>=altura(convertirVertice(v.derecho.izquierdo))){
-                        a=rotar(v,false);
-                    }else{
-                        a=rotar2(v,false);
-                    }
-                }else{
-                    a=rotar2(v,false);
-                }
-            }else{
-                a=v;
-            }*/
             if(altura(convertirVertice(v.derecho))==(altura(convertirVertice(v.izquierdo))+2)){
                 if(v.hayDerecho()){
                     if(altura(convertirVertice(v.derecho.derecho))==(altura(convertirVertice(v.izquierdo))+1)){
-                        a=rotar(v,false);
+                        a=rotar(v,true);
                     }else if(altura(convertirVertice(v.derecho.derecho))==(altura(convertirVertice(v.izquierdo)))){
-                        /*rotar(convertirVertice(v.derecho),false);
-                        a=rotar(convertirVertice(v),true);*/
-                        a=rotar2(v, false);
+                        rotar(convertirVertice(v.derecho),false);
+                        a=rotar(convertirVertice(v),true);
+                        //a=rotar2(v, false);
                     }
                 }
             }else if(altura(convertirVertice(v.izquierdo))==(altura(convertirVertice(v.derecho))+2)){
                 if(v.hayIzquierdo()){
                     if(altura(convertirVertice(v.izquierdo.izquierdo))==(altura(convertirVertice(v.derecho))+1)){
-                        a=rotar(v,true);
-                    }else{
-                        /*rotar(convertirVertice(v.izquierdo),true);
-                        a=rotar(v,false);*/
-                        a=rotar2(v, true);
+                        a=rotar(v,false);
+                    }else if(altura(convertirVertice(v.izquierdo.izquierdo))==altura(convertirVertice(v.derecho))){
+                        rotar(convertirVertice(v.izquierdo),true);
+                        a=rotar(v,false);
+                        //a=rotar2(v, true);
                     }
                 }
             }else{
@@ -149,38 +121,6 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 if(vertice.hayPadre()){
                     padre=convertirVertice(vertice.padre);
                 }
-                aux=izquierdo(vertice);
-                vertice.izquierdo=derecho(aux);
-                if(vertice.izquierdo!=null){
-                    vertice.izquierdo.padre=vertice;
-                }
-                if(aux!=null){
-                    aux.derecho=vertice;
-                    vertice.padre=aux;
-                }
-                aux.padre=padre;
-                /*if(vertice.hayPadre()){
-                    if(vertice.padre.hayIzquierdo()&&vertice.padre.izquierdo.elemento.equals(vertice.elemento)){
-                        vertice.padre.izquierdo=aux;
-                        if(aux!=null){
-                            aux.padre=vertice.padre;
-                        }
-                        
-                    }else{
-                        vertice.padre.derecho=aux;
-                        if(aux!=null){
-                            aux.padre=vertice.padre;
-                        }
-                    }
-                }else{
-                    raiz=aux;
-                }*/
-                //rotarIzquierda(vertice);
-            }else{
-                VerticeAVL padre=null;
-                if(vertice.hayPadre()){
-                    padre=convertirVertice(vertice.padre);
-                }
                 aux=derecho(vertice);
                 vertice.derecho=izquierdo(aux);
                 if(vertice.derecho!=null){
@@ -190,19 +130,43 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                     aux.izquierdo=vertice;
                     vertice.padre=aux;
                 }
-                aux.padre=padre;
-                /*if(vertice.hayPadre()){
-                    if(vertice.padre.hayIzquierdo()&&vertice.padre.izquierdo.elemento.equals(vertice.elemento)){
-                        vertice.padre.izquierdo=aux;
-                        aux.padre=vertice.padre;
+                if(aux!=null){
+                    aux.padre=padre;
+                }
+                if(padre!=null){
+                    if(padre.hayDerecho()&&padre.derecho.elemento.equals(vertice.elemento)){
+                        padre.derecho=aux;
                     }else{
-                        vertice.padre.derecho=aux;
-                        aux.padre=vertice.padre;
+                        padre.izquierdo=aux;
                     }
-                }else{
-                    raiz=aux;
-                }*/
-                //rotarDerecha(vertice);
+                }
+                
+            }else{
+                
+                VerticeAVL padre=null;
+                if(vertice.hayPadre()){
+                    padre=convertirVertice(vertice.padre);
+                }
+                aux=izquierdo(vertice);
+                vertice.izquierdo=derecho(aux);
+                if(vertice.izquierdo!=null){
+                    vertice.izquierdo.padre=vertice;
+                }
+                if(aux!=null){
+                    aux.derecho=vertice;
+                    vertice.padre=aux;
+                }
+                if(aux!=null){
+                    aux.padre=padre;
+                }
+                if(padre!=null){
+                    if(padre.hayDerecho()&&padre.derecho.elemento.equals(vertice.elemento)){
+                        padre.derecho=aux;
+                    }else{
+                        padre.izquierdo=aux;
+                    }
+                }
+                
             }
             actualizarAltura(vertice);
             actualizarAltura(aux);
@@ -211,6 +175,38 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
         return null;
        
     }
+
+    protected Vertice rotarDerecha(Vertice raiz){
+        if(!raiz.hayIzquierdo()){//si el vertice a rotsar no tiene hijo izquierdo
+            throw new IllegalArgumentException("No se puede rotar a la derecha");//no podemos hacer la rotación
+        }
+        Vertice izquierdo=raiz.izquierdo;
+        raiz.izquierdo=izquierdo.derecho;
+        if(raiz.izquierdo!=null){
+            raiz.izquierdo.padre=raiz;
+        }
+        
+        izquierdo.derecho=raiz;
+        raiz.padre=izquierdo;
+        return izquierdo;//raíz nueva
+    }
+
+    protected Vertice rotarIzquierda(Vertice raiz){
+        if(!raiz.hayDerecho()){//si el vertice a rotsar no tiene hijo derecho
+            throw new IllegalArgumentException("No se puede rotar a la izquierda");//no podemos hacer la rotación
+        }
+        Vertice derecho=raiz.derecho;
+        raiz.derecho=derecho.izquierdo;
+        if(raiz.derecho!=null){
+            raiz.derecho.padre=raiz;
+        }
+        
+        derecho.izquierdo=raiz;
+        raiz.padre=derecho;
+        
+        return derecho;//raíz nueva
+    }
+
 
     public VerticeAVL rotar2(VerticeAVL vertice, boolean izquierda){
         if(izquierda){
@@ -287,7 +283,7 @@ public class ArbolAVL3<T extends Comparable<T>> extends ArbolBinarioBusqueda<T>{
                 
             }
             VerticeAVL padre=balancear(vertice);
-            //System.out.println(vertice);
+            System.out.println("Vertice: "+vertice+" Padre: "+padre);
             //System.out.println(vertice.izquierdo);
             actualizarAltura(vertice);
             return padre;
